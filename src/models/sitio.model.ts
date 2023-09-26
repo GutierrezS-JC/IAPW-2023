@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Tarea} from './tarea.model';
 
 @model({settings: {strict: false}})
 export class Sitio extends Entity {
@@ -42,6 +43,9 @@ export class Sitio extends Entity {
     type: 'string',
   })
   usuarioId?: string;
+
+  @hasMany(() => Tarea)
+  tareas: Tarea[];
   // Define well-known properties here
 
   // Indexer property to allow additional data
