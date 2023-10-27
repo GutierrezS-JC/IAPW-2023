@@ -54,7 +54,7 @@ onBeforeMount(() => setWebsites());
       </tr>
     </tbody>
   </table>
-  <WebsiteDetails :website="website" :resetWebsite="resetWebsite" />
+  <WebsiteDetails :website="website" :resetWebsite="resetWebsite" :getWebsites="setWebsites"/>
 </template>
 
 <script>
@@ -74,13 +74,13 @@ export default {
         cancelButtonText: 'No, cancelar',
       }).then((result) => {
         if (result.isConfirmed) {
-          WebSiteService.delete(idSitio).then(
+          WebSiteService.delete(idSitio).then(() => {
             Swal.fire(
               'Eliminado!',
               'El sitio web ha sido eliminado',
               'success'
             )
-          )
+          })
           .catch(e => {
             console.log(e)
             Swal.fire(

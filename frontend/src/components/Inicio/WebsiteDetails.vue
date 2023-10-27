@@ -46,17 +46,19 @@
   export default {
     props: {
       website: Object,
-      resetWebsite: Function
+      resetWebsite: Function,
+      getWebsites: Function
     },
     methods: {
       async editWebsite(){
-        WebSiteService.patch(this.website, this.website.idSitio).then(
+        WebSiteService.patch(this.website, this.website.idSitio).then(() => {
           Swal.fire(
               'Modificado!',
               'El sitio web ha sido modificado correctamente',
               'success'
-            )
-        )
+          )
+          this.getWebsites();
+        })
         .catch(e => {
           console.log(e)
           Swal.fire(

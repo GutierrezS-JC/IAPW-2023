@@ -53,7 +53,6 @@ class WebSiteService {
 
   patch(payload, id) {
     return new Promise((resolve, reject) => {
-      console.log(payload)
       this.service.patch(`/sitios/${id}`, payload).then(res => {
         resolve(res.data)
       })

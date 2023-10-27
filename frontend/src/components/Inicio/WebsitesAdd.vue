@@ -1,12 +1,37 @@
-<script setup>
-  import WebSiteService from '@/services/WebsiteServiceClass'
-  import { ref } from 'vue'
+<script>
+import WebSiteService from '@/services/WebsiteServiceClass'
+import Swal from 'sweetalert2'
+import { ref } from 'vue'
 
-  const websiteAdd = ref({})
+export default {
+  setup() {
+    const websiteAdd = ref({})
 
-  const resetWebsiteAdd = () => {
-    websiteAdd.value = {}
+    const resetWebsiteAdd = () => {
+      websiteAdd.value = {}
+    }
+    
+    const addWebsite = () => {
+      WebSiteService.create(websiteAdd.value)
+        .then(response => {
+          Swal.fire('Éxito', 'El sitio ha sido creado exitosamente', 'success');
+        })
+        .catch(error => {
+          console.log(error)
+          Swal.fire('Error', 'Ocurrió un error al crear el sitio', 'error');
+        });
+
+      // Limpia el formulario después de enviar la solicitud
+      resetWebsiteAdd();
+    }
+
+    return{
+      websiteAdd,
+      resetWebsiteAdd,
+      addWebsite
+    }
   }
+}
 </script>
 
 <template>
@@ -17,7 +42,8 @@
 
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="addFormModal">Nuevo sitio</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetWebsiteAdd()"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            @click="resetWebsiteAdd"></button>
         </div>
 
         <div class="modal-body">
@@ -41,14 +67,16 @@
 
             <div class="mb-2">
               <label for="docExtractor-add-form" class="col-form-label">Documento extractor</label>
-              <textarea class="form-control" id="docExtractor-add-form" rows="3" v-model.number="websiteAdd.docExtractor"></textarea>
+              <textarea class="form-control" id="docExtractor-add-form" rows="3"
+                v-model.number="websiteAdd.docExtractor"></textarea>
             </div>
           </form>
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetWebsiteAdd()">Cerrar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar cambios</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            @click="resetWebsiteAdd">Cerrar</button>
+          <button type="button" class="btn btn-primary" @click="addWebsite" data-bs-dismiss="modal">Guardar cambios</button>
         </div>
       </div>
     </div>
