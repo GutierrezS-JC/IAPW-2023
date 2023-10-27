@@ -21,18 +21,18 @@
             </div>
             <div class="mb-2">
               <label for="profundidad-form" class="col-form-label">Pronfudidad/niveles:</label>
-              <input type="text" class="form-control" id="profundidad-form" v-model="website.niveles">
+              <input type="text" class="form-control" id="profundidad-form" v-model.number="website.niveles">
             </div>
             <div class="mb-2">
               <label for="frecuencia-form" class="col-form-label">Frecuencia</label>
-              <input type="text" class="form-control" id="frecuencia-form" v-model="website.frecuencia">
+              <input type="text" class="form-control" id="frecuencia-form" v-model.number="website.frecuencia">
             </div>
           </form>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetWebsite()">Cerrar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar cambios</button>
+          <button @click="editWebsite" type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar cambios</button>
         </div>
       </div>
     </div>
@@ -40,10 +40,32 @@
 </template>
 
 <script>
+  import WebSiteService from '@/services/WebsiteServiceClass'
+  import Swal from 'sweetalert2'
+
   export default {
     props: {
       website: Object,
       resetWebsite: Function
+    },
+    methods: {
+      async editWebsite(){
+        WebSiteService.patch(this.website, this.website.idSitio).then(
+          Swal.fire(
+              'Modificado!',
+              'El sitio web ha sido modificado correctamente',
+              'success'
+            )
+        )
+        .catch(e => {
+          console.log(e)
+          Swal.fire(
+              'Error',
+              'No se pudo modificar el sitio',
+              'error'
+            )
+        })
+      }
     }
   };
 </script>

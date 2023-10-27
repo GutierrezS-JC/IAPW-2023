@@ -1,12 +1,13 @@
 <script setup>
-    import AppHeader from '../components/AppHeader.vue';
-    import WebsitesList from '../components/WebsitesList.vue';
+    import AppHeader from '@/components/AppHeader/AppHeader.vue';
+    import WebsitesList from '@/components/Inicio/WebsitesList.vue';
+    import WebsitesHead from '@/components/Inicio/WebsitesHead.vue';
 </script>
+
 <template>
     <AppHeader/>
     <div class="container mt-3">
-        <h1>Sitos web generados</h1>
-        <button class="btn btn-dark">Agregar nuevo sitio</button>
+        <WebsitesHead/>
         <WebsitesList/>
     </div>
 </template>
