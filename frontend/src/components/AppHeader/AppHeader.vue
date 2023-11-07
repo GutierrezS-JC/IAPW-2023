@@ -1,7 +1,7 @@
 <script setup>
-  import { useAuth0 } from "@auth0/auth0-vue"
-  import LoginButton from '../Buttons/LoginButton.vue';
-  import LogoutButton from '../Buttons/LogoutButton.vue';
+  import { useAuth0 } from "@auth0/auth0-vue";
+  import LoginButton from '@/components/Buttons/LoginButton.vue';
+  import LogoutButton from '@/components/Buttons/LogoutButton.vue';
   
   const { isAuthenticated } = useAuth0();
 </script>

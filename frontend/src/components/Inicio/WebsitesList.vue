@@ -1,18 +1,12 @@
 <script setup>
 import WebsiteDetails from '@/components/Inicio/WebsiteDetails.vue'
 import WebSiteService from '@/services/WebsiteServiceClass'
+import Swal from 'sweetalert2'
 
 import { ref } from 'vue'
 import { onBeforeMount } from 'vue'
 
-const websites = ref([])
 const website = ref({})
-
-const setWebsites = () => {
-  WebSiteService.getWebsites().then(
-    result => websites.value = result
-  );
-}
 
 const setWebsiteDetails = (id) => {
   WebSiteService.get(id).then(
@@ -24,7 +18,43 @@ const resetWebsite = () => {
   website.value = {}
 }
 
-onBeforeMount(() => setWebsites());
+const deleteWebsite = async (idSitio) => {
+  Swal.fire({
+    title: '¿Estas seguro?',
+    text: "Estas a punto de eliminar un sitio web de forma permanente",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, eliminar!',
+    cancelButtonText: 'No, cancelar',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      WebSiteService.delete(idSitio).then(() => {
+        Swal.fire(
+          'Eliminado!',
+          'El sitio web ha sido eliminado',
+          'success'
+        )
+        props.getWebsites();
+      })
+        .catch(e => {
+          console.log(e)
+          Swal.fire(
+            'Error',
+            'No se pudo eliminar el sitio',
+            'error'
+          )
+        })
+    }
+  })
+}
+
+const props = defineProps({
+  getWebsites: Function,
+  websites: Array
+})
+
 </script>
 
 <template>
@@ -54,44 +84,5 @@ onBeforeMount(() => setWebsites());
       </tr>
     </tbody>
   </table>
-  <WebsiteDetails :website="website" :resetWebsite="resetWebsite" :getWebsites="setWebsites"/>
+  <WebsiteDetails :website="website" :resetWebsite="resetWebsite" :getWebsites="getWebsites" />
 </template>
-
-<script>
-import Swal from 'sweetalert2'
-
-export default {
-  methods: {
-    async deleteWebsite(idSitio) {
-      Swal.fire({
-        title: '¿Estas seguro?',
-        text: "Estas a punto de eliminar un sitio web de forma permanente",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminar!',
-        cancelButtonText: 'No, cancelar',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          WebSiteService.delete(idSitio).then(() => {
-            Swal.fire(
-              'Eliminado!',
-              'El sitio web ha sido eliminado',
-              'success'
-            )
-          })
-          .catch(e => {
-            console.log(e)
-            Swal.fire(
-              'Error',
-              'No se pudo eliminar el sitio',
-              'error'
-            )
-          })
-        }
-      })
-    }
-  }
-}
-</script>
