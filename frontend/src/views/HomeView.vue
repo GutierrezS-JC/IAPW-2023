@@ -1,5 +1,7 @@
 <script setup>
   import LoginForm from '@/components/Home/LoginForm.vue';
+  import LoginButton from '@/components/Buttons/LoginButton.vue';
+
 </script>
 
 <template>
@@ -19,7 +21,8 @@
               <p class="mt-3" style="color: white;">No credit card required.</p>
             </div>
 
-            <button class="btn btn-sm btn-outline-light mt-4">Volver</button>
+            <!-- <button class="btn btn-sm btn-outline-light mt-4">Volver</button> -->
+            <LoginButton/>
           </div>
         </div>
         

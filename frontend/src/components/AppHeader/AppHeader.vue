@@ -20,7 +20,7 @@
             <a class="nav-link active" aria-current="page" href="#">Inicio</a>
           </li>
         </ul>
-        
+         
         <div v-if="!isAuthenticated">
           <span>
             <LoginButton/>
@@ -29,7 +29,7 @@
         
         <div v-if="isAuthenticated">
           <span>
-            <span class="me-3" style="color: white;">Bienvenido</span>
+            <!-- <span class="me-3" style="color: white;">Bienvenido </span> -->
             <LogoutButton/>
           </span>
         </div>

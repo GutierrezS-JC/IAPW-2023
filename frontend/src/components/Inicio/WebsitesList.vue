@@ -58,7 +58,8 @@ const props = defineProps({
 </script>
 
 <template>
-  <table class="table table-hover mt-5">
+  <h1> Lista de sitios </h1>
+  <table class="table table-hover">
     <thead class="table-dark">
       <tr>
         <th scope="col">#</th>

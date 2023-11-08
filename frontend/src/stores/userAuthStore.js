@@ -12,9 +12,9 @@ export const useAuthStore = defineStore('user', {
       this.token = token
       this.userData = userObject
     },
-    logout(token, user) {
+    logout() {
       this.token = null
       this.userData = null
     }
   }
-})
+}) 

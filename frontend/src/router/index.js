@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { authGuard } from '@auth0/auth0-vue'
+
 import HomeView from '../views/HomeView.vue'
 import InicioView from '../views/InicioView.vue'
 
@@ -13,15 +15,8 @@ const router = createRouter({
     {
       path:'/inicio',
       name:'inicio',
+      beforeEnter: authGuard,
       component: InicioView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
     }
   ]
 })

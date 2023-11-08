@@ -22,8 +22,8 @@ onBeforeMount(() => getWebsites());
 
 <template>
     <AppHeader />
-    <div class="container mt-3">
-        <WebsitesHead :getWebsites="getWebsites" />
+    <WebsitesHead :getWebsites="getWebsites" />
+    <div class="container mt-3" style="min-height: 20em;">
         <WebsitesList :getWebsites="getWebsites" :websites="websites" />
     </div>
 </template>
