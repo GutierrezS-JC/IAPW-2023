@@ -59,6 +59,9 @@ const props = defineProps({
 
 <template>
   <h1> Lista de sitios </h1>
+  <button class="btn btn-dark mb-4" type="button" data-bs-target="#modal-add-form" data-bs-toggle="modal">
+    Agregar nuevo sitio
+  </button>
   <table class="table table-hover">
     <thead class="table-dark">
       <tr>
