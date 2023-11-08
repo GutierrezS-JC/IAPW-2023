@@ -31,5 +31,7 @@ import UserAuth from './components/UserAuth/UserAuth.vue';
   <Suspense>
     <UserAuth />
   </Suspense>
-  <RouterView />
+  <Suspense>
+    <RouterView />
+  </Suspense>
 </template>

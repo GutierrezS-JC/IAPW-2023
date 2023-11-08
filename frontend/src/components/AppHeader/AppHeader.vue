@@ -1,9 +1,11 @@
 <script setup>
-  import { useAuth0 } from "@auth0/auth0-vue";
-  import LoginButton from '@/components/Buttons/LoginButton.vue';
-  import LogoutButton from '@/components/Buttons/LogoutButton.vue';
-  
-  const { isAuthenticated } = useAuth0();
+import { useAuth0 } from "@auth0/auth0-vue";
+import LoginButton from '@/components/Buttons/LoginButton.vue';
+import LogoutButton from '@/components/Buttons/LogoutButton.vue';
+
+const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+const token = await getAccessTokenSilently();
+
 </script>
 
 <template>
@@ -20,17 +22,19 @@
             <a class="nav-link active" aria-current="page" href="#">Inicio</a>
           </li>
         </ul>
-         
+
         <div v-if="!isAuthenticated">
           <span>
-            <LoginButton/>
+            <LoginButton />
           </span>
         </div>
-        
+
         <div v-if="isAuthenticated">
-          <span>
+          <span style="color:white">
+            {{ user.name }}
+            {{ token }}
             <!-- <span class="me-3" style="color: white;">Bienvenido </span> -->
-            <LogoutButton/>
+            <LogoutButton />
           </span>
         </div>
 
