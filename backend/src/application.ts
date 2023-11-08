@@ -1,3 +1,4 @@
+import {AuthenticationComponent, registerAuthenticationStrategy} from '@loopback/authentication';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
 import {RepositoryMixin} from '@loopback/repository';
@@ -9,6 +10,7 @@ import {
 import {ServiceMixin} from '@loopback/service-proxy';
 import 'dotenv/config';
 import path from 'path';
+import {JWTAuthenticationStrategy, JWTServiceProvider, KEY} from './authentication-strategies';
 import {MySequence} from './sequence';
 
 export {ApplicationConfig};
@@ -41,5 +43,36 @@ export class SearchApplication extends BootMixin(
         nested: true,
       },
     };
+
+    // Bind authentication component related elements
+    this.component(AuthenticationComponent);
+
+    this.service(JWTServiceProvider);
+
+    // Register the Auth0 JWT authentication strategy
+    registerAuthenticationStrategy(this as any, JWTAuthenticationStrategy);
+    this.configure(KEY).to({
+      jwksUri: 'https://dev-wipx61ystmxfh1rc.us.auth0.com/.well-known/jwks.json',
+      audience: 'https://dev-wipx61ystmxfh1rc.us.auth0.com/api/v2/',
+      issuer: 'https://dev-wipx61ystmxfh1rc.us.auth0.com/',
+      algorithms: ['RS256'],
+    });
+
+    this.api({
+      openapi: '3.0.0',
+      info: {title: 'package or prject name', version: '1.0'},
+      paths: {},
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+        }
+      },
+      servers: [{url: '/'}],
+      security: [{bearerAuth: []}],
+    });
   }
 }
