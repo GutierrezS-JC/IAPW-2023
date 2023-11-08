@@ -1,9 +1,22 @@
 import axios from "axios";
 
 class WebSiteService {
-  constructor() {
+  constructor(isLoggedIn, tokenR) {
     let service = axios.create({ baseURL: 'http://localhost:3000' })
     this.service = service
+    
+    if (isLoggedIn) {
+      this.service.interceptors.request.use(
+        (config) => {
+          const token = tokenR
+          if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+          }
+          return config;
+        },
+        (error) => Promise.reject(error)
+      );
+    }
   }
 
   getWebsites() {
@@ -64,5 +77,5 @@ class WebSiteService {
   }
 }
 
-// export default WebSiteService.prototype
-export default new WebSiteService()
+export default WebSiteService
+// export default new WebSiteService()

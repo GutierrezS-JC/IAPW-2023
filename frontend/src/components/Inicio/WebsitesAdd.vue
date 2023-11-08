@@ -10,7 +10,7 @@ const resetWebsiteAdd = () => {
 }
 
 const addWebsite = () => {
-  WebSiteService.create(websiteAdd.value)
+  new WebSiteService(props.isAuthenticated, props.token).create(websiteAdd.value)
     .then(() => {
       Swal.fire('Éxito', 'El sitio ha sido creado exitosamente', 'success');
       props.getWebsites();
@@ -25,7 +25,9 @@ const addWebsite = () => {
 }
 
 const props = defineProps({
-  getWebsites: Function
+  getWebsites: Function,
+  isAuthenticated: Boolean,
+  token: String
 })
 
 </script>
@@ -71,8 +73,9 @@ const props = defineProps({
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetWebsiteAdd">Cerrar</button>
-          <button type="button" class="btn btn-primary" @click="addWebsite" data-bs-dismiss="modal">Guardar
-            cambios</button>
+          <button type="button" class="btn btn-primary" @click="addWebsite" data-bs-dismiss="modal">
+            Guardar cambios
+          </button>
         </div>
       </div>
     </div>

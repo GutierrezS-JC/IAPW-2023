@@ -12,21 +12,24 @@ import { onBeforeMount } from 'vue'
 const websites = ref([])
 
 const getWebsites = () => {
-    WebSiteService.getWebsites().then(
+    new WebSiteService(isAuthenticated.value, token).getWebsites().then(
         result => websites.value = result
     );
 }
 
 // Metodos de AUTH0
-const { isAuthenticated, user } = useAuth0();
+const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+const token = await getAccessTokenSilently();
 
-onBeforeMount(() => getWebsites());
+onBeforeMount(() => {
+    getWebsites()
+});
 </script>
 
 <template>
     <AppHeader :isAuthenticated="isAuthenticated" />
-    <WebsitesHead :getWebsites="getWebsites" :user="user" />
+    <WebsitesHead :getWebsites="getWebsites" :user="user" :isAuthenticated="isAuthenticated" :token="token" />
     <div class="container mt-3" style="min-height: 30em;">
-        <WebsitesList :getWebsites="getWebsites" :websites="websites" />
+        <WebsitesList :getWebsites="getWebsites" :websites="websites" :isAuthenticated="isAuthenticated" :token="token" />
     </div>
 </template>

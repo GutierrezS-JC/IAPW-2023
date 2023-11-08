@@ -3,7 +3,9 @@ import WebsitesAdd from './WebsitesAdd.vue';
 
 const props = defineProps({
   getWebsites: Function,
-  user: Object
+  user: Object,
+  isAuthenticated: Boolean,
+  token: String
 })
 
 </script>
@@ -17,5 +19,5 @@ const props = defineProps({
         liking.</p>
     </div>
   </div>
-  <WebsitesAdd :getWebsites="getWebsites" />
+  <WebsitesAdd :getWebsites="getWebsites" :isAuthenticated="isAuthenticated" :token="token" />
 </template>

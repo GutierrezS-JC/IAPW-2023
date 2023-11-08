@@ -47,11 +47,13 @@
     props: {
       website: Object,
       resetWebsite: Function,
-      getWebsites: Function
+      getWebsites: Function,
+      isAuthenticated: Boolean,
+      token: String
     },
     methods: {
       async editWebsite(){
-        WebSiteService.patch(this.website, this.website.idSitio).then(() => {
+        new WebSiteService(this.isAuthenticated, this.token).patch(this.website, this.website.idSitio).then(() => {
           Swal.fire(
               'Modificado!',
               'El sitio web ha sido modificado correctamente',
