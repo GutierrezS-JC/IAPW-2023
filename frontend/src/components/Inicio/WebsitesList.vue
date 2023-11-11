@@ -1,17 +1,16 @@
 <script setup>
 import WebsiteDetails from '@/components/Inicio/WebsiteDetails.vue'
-import WebSiteService from '@/services/WebsiteServiceClass'
 import Swal from 'sweetalert2'
 
 import { ref } from 'vue'
-import { onBeforeMount } from 'vue'
+import { client } from '../../types/ApiClient';
 
 const website = ref({})
 
 const setWebsiteDetails = (id) => {
-  new WebSiteService(props.isAuthenticated, props.token).get(id).then(
-    result => website.value = result
-  );
+  client['SitioController.findById'](id).then(
+    result => website.value = result.data
+  )
 }
 
 const resetWebsite = () => {
@@ -30,7 +29,7 @@ const deleteWebsite = async (idSitio) => {
     cancelButtonText: 'No, cancelar',
   }).then((result) => {
     if (result.isConfirmed) {
-      new WebSiteService(props.isAuthenticated, props.token).delete(idSitio).then(() => {
+      client['SitioController.deleteById'](idSitio).then(() => {
         Swal.fire(
           'Eliminado!',
           'El sitio web ha sido eliminado',
@@ -52,9 +51,7 @@ const deleteWebsite = async (idSitio) => {
 
 const props = defineProps({
   getWebsites: Function,
-  websites: Array,
-  isAuthenticated: Boolean,
-  token: String
+  websites: Array
 })
 
 </script>
@@ -90,6 +87,5 @@ const props = defineProps({
       </tr>
     </tbody>
   </table>
-  <WebsiteDetails :website="website" :resetWebsite="resetWebsite" :getWebsites="getWebsites" 
-    :isAuthenticated="isAuthenticated" :token="token" />
+  <WebsiteDetails :website="website" :resetWebsite="resetWebsite" :getWebsites="getWebsites" />
 </template>

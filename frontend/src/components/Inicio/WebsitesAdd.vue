@@ -1,7 +1,7 @@
 <script setup>
-import WebSiteService from '@/services/WebsiteServiceClass'
 import Swal from 'sweetalert2'
 import { ref } from 'vue'
+import { client } from '../../types/ApiClient';
 
 const websiteAdd = ref({})
 
@@ -10,11 +10,10 @@ const resetWebsiteAdd = () => {
 }
 
 const addWebsite = () => {
-  new WebSiteService(props.isAuthenticated, props.token).create(websiteAdd.value)
-    .then(() => {
-      Swal.fire('Éxito', 'El sitio ha sido creado exitosamente', 'success');
-      props.getWebsites();
-    })
+  client['SitioController.create'](null, websiteAdd.value).then(() => {
+    Swal.fire('Éxito', 'El sitio ha sido creado exitosamente', 'success');
+    props.getWebsites();
+  })
     .catch(error => {
       console.log(error)
       Swal.fire('Error', 'Ocurrió un error al crear el sitio', 'error');
@@ -26,8 +25,6 @@ const addWebsite = () => {
 
 const props = defineProps({
   getWebsites: Function,
-  isAuthenticated: Boolean,
-  token: String
 })
 
 </script>
