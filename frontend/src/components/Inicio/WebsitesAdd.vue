@@ -1,37 +1,32 @@
-<script>
-import WebSiteService from '@/services/WebsiteServiceClass'
+<script setup>
 import Swal from 'sweetalert2'
 import { ref } from 'vue'
+import { client } from '../../types/ApiClient';
 
-export default {
-  setup() {
-    const websiteAdd = ref({})
+const websiteAdd = ref({})
 
-    const resetWebsiteAdd = () => {
-      websiteAdd.value = {}
-    }
-    
-    const addWebsite = () => {
-      WebSiteService.create(websiteAdd.value)
-        .then(response => {
-          Swal.fire('Éxito', 'El sitio ha sido creado exitosamente', 'success');
-        })
-        .catch(error => {
-          console.log(error)
-          Swal.fire('Error', 'Ocurrió un error al crear el sitio', 'error');
-        });
-
-      // Limpia el formulario después de enviar la solicitud
-      resetWebsiteAdd();
-    }
-
-    return{
-      websiteAdd,
-      resetWebsiteAdd,
-      addWebsite
-    }
-  }
+const resetWebsiteAdd = () => {
+  websiteAdd.value = {}
 }
+
+const addWebsite = () => {
+  client['SitioController.create'](null, websiteAdd.value).then(() => {
+    Swal.fire('Éxito', 'El sitio ha sido creado exitosamente', 'success');
+    props.getWebsites();
+  })
+    .catch(error => {
+      console.log(error)
+      Swal.fire('Error', 'Ocurrió un error al crear el sitio', 'error');
+    });
+
+  // Limpia el formulario después de enviar la solicitud
+  resetWebsiteAdd();
+}
+
+const props = defineProps({
+  getWebsites: Function,
+})
+
 </script>
 
 <template>
@@ -74,9 +69,10 @@ export default {
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-            @click="resetWebsiteAdd">Cerrar</button>
-          <button type="button" class="btn btn-primary" @click="addWebsite" data-bs-dismiss="modal">Guardar cambios</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetWebsiteAdd">Cerrar</button>
+          <button type="button" class="btn btn-primary" @click="addWebsite" data-bs-dismiss="modal">
+            Guardar cambios
+          </button>
         </div>
       </div>
     </div>

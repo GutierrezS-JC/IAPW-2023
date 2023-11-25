@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -26,6 +27,7 @@ export class SitioController {
     public sitioRepository: SitioRepository,
   ) { }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @post('/sitios')
   @response(200, {
     description: 'Sitio model instance',
@@ -47,6 +49,7 @@ export class SitioController {
     return this.sitioRepository.create(sitio);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/sitios/count')
   @response(200, {
     description: 'Sitio model count',
@@ -58,6 +61,7 @@ export class SitioController {
     return this.sitioRepository.count(where);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/sitios')
   @response(200, {
     description: 'Array of Sitio model instances',
@@ -76,6 +80,7 @@ export class SitioController {
     return this.sitioRepository.find(filter);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @patch('/sitios')
   @response(200, {
     description: 'Sitio PATCH success count',
@@ -95,6 +100,7 @@ export class SitioController {
     return this.sitioRepository.updateAll(sitio, where);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/sitios/{id}')
   @response(200, {
     description: 'Sitio model instance',
@@ -111,6 +117,7 @@ export class SitioController {
     return this.sitioRepository.findById(id, filter);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @patch('/sitios/{id}')
   @response(204, {
     description: 'Sitio PATCH success',
@@ -129,6 +136,7 @@ export class SitioController {
     await this.sitioRepository.updateById(id, sitio);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @put('/sitios/{id}')
   @response(204, {
     description: 'Sitio PUT success',
@@ -140,6 +148,7 @@ export class SitioController {
     await this.sitioRepository.replaceById(id, sitio);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @del('/sitios/{id}')
   @response(204, {
     description: 'Sitio DELETE success',

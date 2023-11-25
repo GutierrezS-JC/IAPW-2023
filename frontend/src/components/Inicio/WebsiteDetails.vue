@@ -6,7 +6,8 @@
 
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Editar sitio</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetWebsite()"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            @click="resetWebsite()"></button>
         </div>
 
         <div class="modal-body">
@@ -32,42 +33,42 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetWebsite()">Cerrar</button>
-          <button @click="editWebsite" type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar cambios</button>
+          <button @click="editWebsite(props.website.idSitio)" type="button" class="btn btn-primary"
+            data-bs-dismiss="modal">
+            Guardar cambios
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-  import WebSiteService from '@/services/WebsiteServiceClass'
-  import Swal from 'sweetalert2'
+<script setup>
+import Swal from 'sweetalert2'
+import { client } from '../../types/ApiClient';
 
-  export default {
-    props: {
-      website: Object,
-      resetWebsite: Function,
-      getWebsites: Function
-    },
-    methods: {
-      async editWebsite(){
-        WebSiteService.patch(this.website, this.website.idSitio).then(() => {
-          Swal.fire(
-              'Modificado!',
-              'El sitio web ha sido modificado correctamente',
-              'success'
-          )
-          this.getWebsites();
-        })
-        .catch(e => {
-          console.log(e)
-          Swal.fire(
-              'Error',
-              'No se pudo modificar el sitio',
-              'error'
-            )
-        })
-      }
-    }
-  };
+const props = defineProps({
+  website: Object,
+  resetWebsite: Function,
+  getWebsites: Function,
+})
+
+const editWebsite = async (id) => {
+  client['SitioController.updateById'](id, props.website).then(() => {
+    Swal.fire(
+      'Modificado!',
+      'El sitio web ha sido modificado correctamente',
+      'success'
+    )
+    props.getWebsites();
+  })
+    .catch(e => {
+      console.log(e)
+      Swal.fire(
+        'Error',
+        'No se pudo modificar el sitio',
+        'error'
+      )
+    })
+}
 </script>
