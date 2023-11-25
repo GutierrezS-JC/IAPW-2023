@@ -3,10 +3,19 @@ import Swal from 'sweetalert2'
 import { ref } from 'vue'
 import { client } from '../../types/ApiClient';
 
-const websiteAdd = ref({})
+const props = defineProps({
+  getWebsites: Function,
+  user: Object
+})
+
+const websiteAdd = ref({
+  userEmail: props.user.email,
+})
 
 const resetWebsiteAdd = () => {
-  websiteAdd.value = {}
+  websiteAdd.value = {
+    userEmail: props.user.email
+  }
 }
 
 const addWebsite = () => {
@@ -23,9 +32,6 @@ const addWebsite = () => {
   resetWebsiteAdd();
 }
 
-const props = defineProps({
-  getWebsites: Function,
-})
 
 </script>
 
@@ -61,7 +67,7 @@ const props = defineProps({
             </div>
 
             <div class="mb-2">
-              <label for="docExtractor-add-form" class="col-form-label">Documento extractor</label>
+              <label for="docExtractor-add-form" class="col-form-label">Extractor de documento</label>
               <textarea class="form-control" id="docExtractor-add-form" rows="3"
                 v-model.number="websiteAdd.docExtractor"></textarea>
             </div>

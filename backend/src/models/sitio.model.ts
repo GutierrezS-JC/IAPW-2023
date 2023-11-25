@@ -41,8 +41,14 @@ export class Sitio extends Entity {
 
   @property({
     type: 'string',
+    required: true,
   })
-  usuarioId?: string;
+  userEmail: string;
+
+  // @property({
+  //   type: 'string',
+  // })
+  // usuarioId?: string;
 
   @hasMany(() => Tarea)
   tareas: Tarea[];

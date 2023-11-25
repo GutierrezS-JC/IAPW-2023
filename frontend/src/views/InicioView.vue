@@ -11,22 +11,24 @@ import { client } from '../types/ApiClient';
 
 // Metodos de AUTH0
 const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-const token = await getAccessTokenSilently();
 
 // Sitios obtenidos desde BD
 const websites = ref([])
 
 // Configurando token
-client.defaults.headers['authorization'] = `Bearer ${token}`
+const configureToken = async () => {
+    const token = await getAccessTokenSilently();
+    client.defaults.headers['authorization'] = `Bearer ${token}`
+}
 
 const getWebsites = () => {
-    client['SitioController.find']().then(
+    client['SitioController.findByEmail'](user.value.email).then(
         result => websites.value = result.data
     )
 }
 
-
-onBeforeMount(() => {
+onBeforeMount( async () => {
+    await configureToken()
     getWebsites()
 });
 </script>

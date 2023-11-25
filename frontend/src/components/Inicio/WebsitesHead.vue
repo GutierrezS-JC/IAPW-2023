@@ -17,5 +17,5 @@ const props = defineProps({
         liking.</p>
     </div>
   </div>
-  <WebsitesAdd :getWebsites="getWebsites" />
+  <WebsitesAdd :getWebsites="getWebsites" :user="user" />
 </template>
