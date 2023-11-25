@@ -25,7 +25,7 @@ declare namespace Components {
             niveles: number;
             frecuencia: number;
             docExtractor: string;
-            usuarioId?: string;
+            userEmail: string;
         }
         /**
          * NewSitioInUsuario
@@ -38,7 +38,7 @@ declare namespace Components {
             niveles: number;
             frecuencia: number;
             docExtractor: string;
-            usuarioId?: string;
+            userEmail: string;
         }
         /**
          * NewTarea
@@ -92,42 +92,12 @@ declare namespace Components {
             niveles: number;
             frecuencia: number;
             docExtractor: string;
-            usuarioId?: string;
+            userEmail: string;
         }
         /**
          * Sitio.Filter
          */
         export interface SitioFilter {
-            offset?: number;
-            /**
-             * example:
-             * 100
-             */
-            limit?: number;
-            skip?: number;
-            order?: string | string[];
-            /**
-             * Sitio.Fields
-             */
-            fields?: /* Sitio.Fields */ {
-                [name: string]: any;
-                idSitio?: boolean;
-                nombre?: boolean;
-                url?: boolean;
-                niveles?: boolean;
-                frecuencia?: boolean;
-                docExtractor?: boolean;
-                usuarioId?: boolean;
-            } | string[];
-            /**
-             * Sitio.IncludeFilter
-             */
-            include?: (/* Sitio.IncludeFilter.Items */ SitioIncludeFilterItems | string)[];
-        }
-        /**
-         * Sitio.Filter
-         */
-        export interface SitioFilter1 {
             offset?: number;
             /**
              * example:
@@ -153,7 +123,37 @@ declare namespace Components {
                 niveles?: boolean;
                 frecuencia?: boolean;
                 docExtractor?: boolean;
-                usuarioId?: boolean;
+                userEmail?: boolean;
+            } | string[];
+            /**
+             * Sitio.IncludeFilter
+             */
+            include?: (/* Sitio.IncludeFilter.Items */ SitioIncludeFilterItems | string)[];
+        }
+        /**
+         * Sitio.Filter
+         */
+        export interface SitioFilter1 {
+            offset?: number;
+            /**
+             * example:
+             * 100
+             */
+            limit?: number;
+            skip?: number;
+            order?: string | string[];
+            /**
+             * Sitio.Fields
+             */
+            fields?: /* Sitio.Fields */ {
+                [name: string]: any;
+                idSitio?: boolean;
+                nombre?: boolean;
+                url?: boolean;
+                niveles?: boolean;
+                frecuencia?: boolean;
+                docExtractor?: boolean;
+                userEmail?: boolean;
             } | string[];
             /**
              * Sitio.IncludeFilter
@@ -179,7 +179,7 @@ declare namespace Components {
             niveles?: number;
             frecuencia?: number;
             docExtractor?: string;
-            usuarioId?: string;
+            userEmail?: string;
         }
         /**
          * Sitio.ScopeFilter
@@ -215,7 +215,7 @@ declare namespace Components {
             niveles: number;
             frecuencia: number;
             docExtractor: string;
-            usuarioId?: string;
+            userEmail: string;
             tareas?: /**
              * TareaWithRelations
              * (tsType: TareaWithRelations, schemaOptions: { includeRelations: true })
@@ -482,7 +482,7 @@ declare namespace Paths {
     }
     namespace SitioControllerFind {
         namespace Parameters {
-            export type Filter = /* Sitio.Filter */ Components.Schemas.SitioFilter1;
+            export type Filter = /* Sitio.Filter */ Components.Schemas.SitioFilter;
         }
         export interface QueryParameters {
             filter?: Parameters.Filter;
@@ -495,9 +495,23 @@ declare namespace Paths {
             Components.Schemas.SitioWithRelations[];
         }
     }
-    namespace SitioControllerFindById {
+    namespace SitioControllerFindByEmail {
         namespace Parameters {
             export type Filter = /* Sitio.Filter */ Components.Schemas.SitioFilter;
+            export type UserEmail = string;
+        }
+        export interface QueryParameters {
+            userEmail?: Parameters.UserEmail;
+            filter?: Parameters.Filter;
+        }
+        namespace Responses {
+            export interface $200 {
+            }
+        }
+    }
+    namespace SitioControllerFindById {
+        namespace Parameters {
+            export type Filter = /* Sitio.Filter */ Components.Schemas.SitioFilter1;
             export type Id = string;
         }
         export interface PathParameters {
@@ -1011,6 +1025,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.SitioControllerCount.Responses.$200>
   /**
+   * SitioController.findByEmail
+   */
+  'SitioController.findByEmail'(
+    parameters?: Parameters<Paths.SitioControllerFindByEmail.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.SitioControllerFindByEmail.Responses.$200>
+  /**
    * SitioTareaController.find
    */
   'SitioTareaController.find'(
@@ -1290,6 +1312,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.SitioControllerCount.Responses.$200>
+  }
+  ['/sitios/email']: {
+    /**
+     * SitioController.findByEmail
+     */
+    'get'(
+      parameters?: Parameters<Paths.SitioControllerFindByEmail.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.SitioControllerFindByEmail.Responses.$200>
   }
   ['/sitios/{id}/tareas']: {
     /**
