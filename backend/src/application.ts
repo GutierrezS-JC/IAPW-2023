@@ -14,8 +14,8 @@ import {JWTAuthenticationStrategy, JWTServiceProvider, KEY} from './authenticati
 import {MySequence} from './sequence';
 
 // CronJob
-import { CronComponent } from '@loopback/cron';
-import { MyCronJob } from './utils/MyCronJob.';
+import {CronComponent} from '@loopback/cron';
+import {MyCronJob} from './utils/MyCronJob.';
 
 export {ApplicationConfig};
 
@@ -79,8 +79,8 @@ export class SearchApplication extends BootMixin(
       security: [{bearerAuth: []}],
     });
 
-    // this.component(CronComponent);
-    // this.add(createBindingFromClass(MyCronJob));
+    this.component(CronComponent);
+    this.add(createBindingFromClass(MyCronJob));
 
   }
 }
