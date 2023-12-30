@@ -8,8 +8,6 @@ const snapshotRepository = new SnapshotRepository(new MemoryDataSource())
 const fetch = require('node-fetch');
 const isUrlHttp = require('is-url-http')
 
-// let resultadosPorNivel: {[key: string]: {nivel: number, resultados: {[key: string]: object}[]}} = {};
-
 const verificarAtributos = (sitio: Sitio) => {
   if (!sitio.url) {
     throw new Error('URL not found')
@@ -27,12 +25,6 @@ const verificarAtributos = (sitio: Sitio) => {
     throw new Error('URL is not a valid HTTP URL')
   }
 }
-
-// export async function procesar(sitio: Sitio, tarea: Tarea, urlsHttp: Set<string>,
-//   baseUrl: string, niveles: number = 1, resultAcumulados: Nivel[] = []) {
-//   const nuevoSnapshot = crearNuevoSnapshot(tarea.getId());
-
-// }
 
 export async function processWebsite(sitio: Sitio, tarea: Tarea, urlsHttp: Set<String>,
   baseUrl: string, niveles: number = 1,
@@ -52,26 +44,7 @@ export async function processWebsite(sitio: Sitio, tarea: Tarea, urlsHttp: Set<S
       // La funcion << definida en el frontend (cheerio) => {}) >> espera otra funcion para utilizarlos y construir el elemento
       const result = fn($);
 
-      // Verificar si ya existe un resultado para el nivel actual
-      // const nivelKey = `Nivel ${niveles}`;
-      // if (!resultAcumulados[nivelKey]) {
-      //   resultAcumulados[nivelKey] = [];
-      // }
-
-      const nivel: Nivel = {
-        nivel: niveles,
-        resultados: [result],
-      };
-
-      // Agregar el resultado al array correspondiente al nivel actual
-      // resultAcumulados[nivelKey].push(result);
-      // resultAcumulados.push(nivel);
-
-      // Acumular los resultados para este nivel
-      // resultAcumulados.push(
-      //   [{`Nivel ${niveles}`]: result,
-      // );
-
+      // Acumulamos los resultados para este nivel
       const nivelKey = `Nivel ${niveles}`;
       if (!resultadosPorNivel[nivelKey]) {
         resultadosPorNivel[nivelKey] = {
@@ -80,14 +53,8 @@ export async function processWebsite(sitio: Sitio, tarea: Tarea, urlsHttp: Set<S
         };
       }
 
+      // Agregar el resultado al array correspondiente al nivel actual
       resultadosPorNivel[nivelKey].resultados.push(result);
-      console.log(resultadosPorNivel);
-      console.log('Estoy en nivel ' + niveles);
-
-      // if (niveles === sitio.niveles) {
-      //   const nuevoSnapshot = await crearNuevoSnapshot(tarea.getId(), resultAcumulados);
-      //   await guardarSnapshot(nuevoSnapshot);
-      // }
 
       if (niveles < sitio.niveles) {
         // Obtenemos todos los enlaces en la pagina
@@ -110,12 +77,11 @@ export async function processWebsite(sitio: Sitio, tarea: Tarea, urlsHttp: Set<S
               // Creamos un nuevo objeto sitio y agregamos la propiedad url
               // Esto sirve para garantizar que el objeto sitio (original) no se modifique
               linkPromises.push(processWebsite({...sitio, url: resolvedUrl} as Sitio & {url: string},
-                tarea, urlsHttp, baseUrl, niveles + 1));
+                tarea, urlsHttp, baseUrl, niveles + 1, resultadosPorNivel));
             }
           }
         });
         await Promise.all(linkPromises);
-        console.log('termine')
         resultadosPorNivel = {}
       }
     }
@@ -139,3 +105,17 @@ const crearNuevoSnapshot = async (tareaId: string, documentos: Nivel[] = []) => 
 const guardarSnapshot = async (snapshot: Snapshot): Promise<void> => {
   await snapshotRepository.create(snapshot);
 };
+
+export async function runProcess(sitio: Sitio, tarea: Tarea, urlsHttp: Set<String>,
+  baseUrl: string) {
+
+  const resultadosPorNivel: {[key: string]: {nivel: number, resultados: {[key: string]: object}[]}} = {};
+
+  // Inicia el proceso con el sitio inicial
+  await processWebsite(sitio, tarea, urlsHttp, baseUrl, 1, resultadosPorNivel);
+
+  // Crea el Snapshot al finalizar todas las llamadas recursivas
+  const documentos: Nivel[] = Object.values(resultadosPorNivel).map(entry => entry);
+  const nuevoSnapshot = await crearNuevoSnapshot(tarea.getId(), documentos);
+  await guardarSnapshot(nuevoSnapshot);
+}

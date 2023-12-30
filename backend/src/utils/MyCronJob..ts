@@ -3,7 +3,7 @@ import {CronJob, cronJob} from '@loopback/cron';
 import {repository} from '@loopback/repository';
 import {Sitio, Tarea} from '../models';
 import {SitioRepository, TareaRepository} from '../repositories';
-import {processWebsite} from './cheerioHelper';
+import {runProcess} from './cheerioHelper';
 
 @cronJob()
 export class MyCronJob extends CronJob {
@@ -50,7 +50,8 @@ export class MyCronJob extends CronJob {
                 // INICIO PROCESAMIENTO DEL SITIO
                 try {
                   const baseUrl = sitio.url;
-                  await processWebsite(sitio, nuevaTarea, urlsHttp, baseUrl)
+                  // await processWebsite(sitio, nuevaTarea, urlsHttp, baseUrl)
+                  await runProcess(sitio, nuevaTarea, urlsHttp, baseUrl)
                   console.log(`Process has been completed for: ${sitio.nombre}`);
 
                   // TERMINAMOS EL PROCESAMIENTO
