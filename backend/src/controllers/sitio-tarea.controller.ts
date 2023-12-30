@@ -54,18 +54,18 @@ export class SitioTareaController {
     },
   })
   async create(
-    @param.path.string('id') id: typeof Sitio.prototype.idSitio,
+    @param.path.string('id') id: typeof Sitio.prototype.id,
     @requestBody({
       content: {
         'application/json': {
           schema: getModelSchemaRef(Tarea, {
             title: 'NewTareaInSitio',
-            exclude: ['idTarea'],
+            exclude: ['id'],
             optional: ['sitioId']
           }),
         },
       },
-    }) tarea: Omit<Tarea, 'idTarea'>,
+    }) tarea: Omit<Tarea, 'id'>,
   ): Promise<Tarea> {
     return this.sitioRepository.tareas(id).create(tarea);
   }

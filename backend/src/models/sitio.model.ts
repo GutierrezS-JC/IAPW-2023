@@ -1,13 +1,14 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Tarea} from './tarea.model';
 
-@model({settings: {strict: false}})
+@model()
 export class Sitio extends Entity {
   @property({
+    type: 'string',
     id: true,
     generated: true,
   })
-  idSitio?: string;
+  id?: string;
 
   @property({
     type: 'string',
@@ -45,18 +46,8 @@ export class Sitio extends Entity {
   })
   userEmail: string;
 
-  // @property({
-  //   type: 'string',
-  // })
-  // usuarioId?: string;
-
   @hasMany(() => Tarea)
   tareas: Tarea[];
-  // Define well-known properties here
-
-  // Indexer property to allow additional data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [prop: string]: any;
 
   constructor(data?: Partial<Sitio>) {
     super(data);

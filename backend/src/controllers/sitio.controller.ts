@@ -1,4 +1,4 @@
-import { authenticate } from '@loopback/authentication';
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -18,8 +18,8 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import { Sitio } from '../models';
-import { SitioRepository } from '../repositories';
+import {Sitio} from '../models';
+import {SitioRepository} from '../repositories';
 
 export class SitioController {
   constructor(
@@ -27,11 +27,11 @@ export class SitioController {
     public sitioRepository: SitioRepository,
   ) { }
 
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @post('/sitios')
   @response(200, {
     description: 'Sitio model instance',
-    content: { 'application/json': { schema: getModelSchemaRef(Sitio) } },
+    content: {'application/json': {schema: getModelSchemaRef(Sitio)}},
   })
   async create(
     @requestBody({
@@ -39,21 +39,21 @@ export class SitioController {
         'application/json': {
           schema: getModelSchemaRef(Sitio, {
             title: 'NewSitio',
-            exclude: ['idSitio'],
+            exclude: ['id'],
           }),
         },
       },
     })
-    sitio: Omit<Sitio, 'idSitio'>,
+    sitio: Omit<Sitio, 'id'>,
   ): Promise<Sitio> {
     return this.sitioRepository.create(sitio);
   }
 
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/sitios/count')
   @response(200, {
     description: 'Sitio model count',
-    content: { 'application/json': { schema: CountSchema } },
+    content: {'application/json': {schema: CountSchema}},
   })
   async count(
     @param.where(Sitio) where?: Where<Sitio>,
@@ -61,7 +61,7 @@ export class SitioController {
     return this.sitioRepository.count(where);
   }
 
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/sitios')
   @response(200, {
     description: 'Array of Sitio model instances',
@@ -69,7 +69,7 @@ export class SitioController {
       'application/json': {
         schema: {
           type: 'array',
-          items: getModelSchemaRef(Sitio, { includeRelations: true }),
+          items: getModelSchemaRef(Sitio, {includeRelations: true}),
         },
       },
     },
@@ -80,17 +80,17 @@ export class SitioController {
     return this.sitioRepository.find(filter);
   }
 
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @patch('/sitios')
   @response(200, {
     description: 'Sitio PATCH success count',
-    content: { 'application/json': { schema: CountSchema } },
+    content: {'application/json': {schema: CountSchema}},
   })
   async updateAll(
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Sitio, { partial: true }),
+          schema: getModelSchemaRef(Sitio, {partial: true}),
         },
       },
     })
@@ -100,24 +100,24 @@ export class SitioController {
     return this.sitioRepository.updateAll(sitio, where);
   }
 
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/sitios/{id}')
   @response(200, {
     description: 'Sitio model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(Sitio, { includeRelations: true }),
+        schema: getModelSchemaRef(Sitio, {includeRelations: true}),
       },
     },
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(Sitio, { exclude: 'where' }) filter?: FilterExcludingWhere<Sitio>
+    @param.filter(Sitio, {exclude: 'where'}) filter?: FilterExcludingWhere<Sitio>
   ): Promise<Sitio> {
     return this.sitioRepository.findById(id, filter);
   }
 
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @patch('/sitios/{id}')
   @response(204, {
     description: 'Sitio PATCH success',
@@ -127,7 +127,7 @@ export class SitioController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Sitio, { partial: true }),
+          schema: getModelSchemaRef(Sitio, {partial: true}),
         },
       },
     })
@@ -136,7 +136,7 @@ export class SitioController {
     await this.sitioRepository.updateById(id, sitio);
   }
 
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @put('/sitios/{id}')
   @response(204, {
     description: 'Sitio PUT success',
@@ -148,7 +148,7 @@ export class SitioController {
     await this.sitioRepository.replaceById(id, sitio);
   }
 
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @del('/sitios/{id}')
   @response(204, {
     description: 'Sitio DELETE success',
@@ -157,8 +157,7 @@ export class SitioController {
     await this.sitioRepository.deleteById(id);
   }
 
-
-  @authenticate({ strategy: 'auth0-jwt' })
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/sitios/email')
   async findByEmail(
     @param.query.string('userEmail') userEmail?: string,
@@ -168,7 +167,7 @@ export class SitioController {
     if (userEmail) {
       sitios = await this.sitioRepository.find({
         ...filter,
-        where: { userEmail },
+        where: {userEmail},
       });
     }
     return sitios;
