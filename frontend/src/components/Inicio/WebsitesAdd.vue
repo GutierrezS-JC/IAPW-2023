@@ -10,13 +10,13 @@ const props = defineProps({
 
 const websiteAdd = ref({
   userEmail: props.user.email,
-  docExtractor: `(cheerio) => {\n    return {attr:cheerio(\"elem\")}\n }`
+  docExtractor: `(cheerio) => {\n    return {attr:cheerio(\"elem\").text()}\n }`
 })
 
 const resetWebsiteAdd = () => {
   websiteAdd.value = {
     userEmail: props.user.email,
-    docExtractor: `(cheerio) => {\n    return {attr:cheerio(\"elem\")}\n }`
+    docExtractor: `(cheerio) => {\n    return {attr:cheerio(\"elem\").text()}\n }`
   }
 }
 
@@ -71,7 +71,7 @@ const addWebsite = () => {
             <div class="mb-2">
               <label for="docExtractor-add-form" class="col-form-label">Extractor de documento</label>
               <textarea class="form-control" id="docExtractor-add-form" rows="3"
-                v-model.number="websiteAdd.docExtractor" spellcheck="false"></textarea>
+                v-model="websiteAdd.docExtractor" spellcheck="false"></textarea>
             </div>
           </form>
         </div>

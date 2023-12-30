@@ -80,9 +80,9 @@ const props = defineProps({
         <td>{{ website.niveles }}</td>
         <td>{{ website.frecuencia }}</td>
         <td> <span class="fs-4">
-            <i @click="setWebsiteDetails(website.idSitio)" style="cursor: pointer;" data-bs-toggle="modal"
+            <i @click="setWebsiteDetails(website.id)" style="cursor: pointer;" data-bs-toggle="modal"
               data-bs-target="#staticBackdrop" class="bi bi-pencil-square me-4"></i>
-            <i @click="deleteWebsite(website.idSitio)" class="bi bi-trash3-fill" style="cursor: pointer;"></i></span>
+            <i @click="deleteWebsite(website.id)" class="bi bi-trash3-fill" style="cursor: pointer;"></i></span>
         </td>
       </tr>
     </tbody>
