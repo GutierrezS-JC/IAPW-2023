@@ -6,7 +6,7 @@ import {SitioRepository, TareaRepository} from '../repositories';
 
 @cronJob()
 export class MyCronJob extends CronJob {
-  // Guardo las instancias de los jobs
+  // Para guardar las instancias de los jobs
   private runningJobs: {[sitioId: string]: CronJob} = {};
 
   constructor(
@@ -48,7 +48,7 @@ export class MyCronJob extends CronJob {
 
                 // INICIO PROCESAMIENTO DEL SITIO
                 try {
-                  // await processWebsite(sitio, nuevaTarea, urlsHttp)
+                  await processWebsite(sitio, nuevaTarea, urlsHttp, baseUrl)
                   console.log(`Process has been completed for: ${sitio.nombre}`);
 
                   // TERMINAMOS EL PROCESAMIENTO
