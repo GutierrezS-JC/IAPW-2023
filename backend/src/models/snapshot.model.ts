@@ -32,7 +32,9 @@ export class Snapshot extends Entity {
     itemType: 'object',
     required: true,
   })
-  documentos: object[];
+  // documentos?: {[key: string]: object[]};
+  // documentos?: {[key: string]: object}[];
+  documentos?: Nivel[];
 
   @property({
     type: 'string',
