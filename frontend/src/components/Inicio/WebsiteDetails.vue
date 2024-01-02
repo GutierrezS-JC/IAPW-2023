@@ -30,16 +30,19 @@
             </div>
             <div class="mb-2">
               <label for="docExtractor-form" class="col-form-label">Extractor de documento</label>
-              <textarea class="form-control" id="docExtractor-add-form" rows="3"
-                v-model="website.docExtractor" spellcheck="false"></textarea>
+              <textarea class="form-control" id="docExtractor-form" rows="3" v-model="website.docExtractor"
+                spellcheck="false"></textarea>
+            </div>
+            <div class="mb-2">
+              <label for="custom-selector-form" class="col-form-label">Selector de links (opcional)</label>
+              <input type="text" class="form-control" id="custom-selector-form" v-model="website.customLinkSelector">
             </div>
           </form>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetWebsite()">Cerrar</button>
-          <button @click="editWebsite(props.website.id)" type="button" class="btn btn-primary"
-            data-bs-dismiss="modal">
+          <button @click="editWebsite(props.website.id)" type="button" class="btn btn-primary" data-bs-dismiss="modal">
             Guardar cambios
           </button>
         </div>

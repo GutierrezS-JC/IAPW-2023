@@ -70,8 +70,13 @@ const addWebsite = () => {
 
             <div class="mb-2">
               <label for="docExtractor-add-form" class="col-form-label">Extractor de documento</label>
-              <textarea class="form-control" id="docExtractor-add-form" rows="3"
-                v-model="websiteAdd.docExtractor" spellcheck="false"></textarea>
+              <textarea class="form-control" id="docExtractor-add-form" rows="3" v-model="websiteAdd.docExtractor"
+                spellcheck="false"></textarea>
+            </div>
+            <div class="mb-2">
+              <label for="custom-selector-add-form" class="col-form-label">Selector de links (opcional)</label>
+              <input type="text" class="form-control" id="custo-selector-add-form"
+                v-model="websiteAdd.customLinkSelector">
             </div>
           </form>
         </div>
