@@ -22,7 +22,7 @@ export class MyCronJob extends CronJob {
 
         sitios.forEach(async sitio => {
           // Seteo la frecuencia establecida en el sitio obtenido de la BD
-          const cronTime = `*/${sitio.frecuencia} * * * * *`;
+          const cronTime = `*/${sitio.frecuencia} * * * * `;
 
           if (this.runningJobs[sitio.getId()]) {
             // El JOB ya se encuentra en ejecucion

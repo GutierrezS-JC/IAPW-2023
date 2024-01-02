@@ -42,7 +42,8 @@ export async function processWebsite(sitio: Sitio, tarea: Tarea, urlsHttp: Set<S
       const fn = eval(sitio.docExtractor);
 
       // La funcion << definida en el frontend (cheerio) => {}) >> espera otra funcion para utilizarlos y construir el elemento
-      const result = fn($);
+      // Agreganos el url a result
+      const result = {...fn($), url: sitio.url};
 
       // Acumulamos los resultados para este nivel
       const nivelKey = `Nivel ${niveles}`;
@@ -56,9 +57,11 @@ export async function processWebsite(sitio: Sitio, tarea: Tarea, urlsHttp: Set<S
       // Agregar el resultado al array correspondiente al nivel actual
       resultadosPorNivel[nivelKey].resultados.push(result);
 
-      if (niveles < sitio.niveles) {
+      if (niveles <= sitio.niveles) {
         // Obtenemos todos los enlaces en la pagina
-        const links = $('a');
+        // Vemos si el selector personalizado este seteado, sino usamos 'a' default
+        const linksSelector = sitio.customLinkSelector ? sitio.customLinkSelector : 'a';
+        const links = $(linksSelector);
         const linkPromises: Promise<void>[] = [];
 
         links.each((index, link) => {
@@ -68,7 +71,6 @@ export async function processWebsite(sitio: Sitio, tarea: Tarea, urlsHttp: Set<S
           if (href) {
             // Resolver la URL relativa a la URL base del sitio
             const resolvedUrl = new URL(href, sitio.url).toString();
-
             // Verificamos que el enlace resuelto esté dentro de la URL base del sitio
             if (resolvedUrl.startsWith(baseUrl) && !urlsHttp.has(resolvedUrl) && isUrlHttp(resolvedUrl)) {
               urlsHttp.add(resolvedUrl);

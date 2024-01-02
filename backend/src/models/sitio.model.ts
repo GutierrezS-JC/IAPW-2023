@@ -42,6 +42,11 @@ export class Sitio extends Entity {
 
   @property({
     type: 'string',
+  })
+  customLinkSelector: string;
+
+  @property({
+    type: 'string',
     required: true,
   })
   userEmail: string;
