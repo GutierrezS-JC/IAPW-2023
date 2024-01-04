@@ -34,6 +34,17 @@ const addWebsite = () => {
   resetWebsiteAdd();
 }
 
+const isValidUrl = () => {
+  let url;
+  try {
+    url = new URL(websiteAdd.value.url);
+    if (url.protocol === "http:" || url.protocol === "https:")
+      Swal.fire('Correcto', `La URL ${websiteAdd.value.url} es correcta`, 'success');
+  }
+  catch (err) {
+    Swal.fire('Error', 'La URL no es valida', 'error');
+  }
+}
 
 </script>
 
@@ -56,7 +67,13 @@ const addWebsite = () => {
               <input type="text" class="form-control" id="name-add-form" v-model="websiteAdd.nombre">
             </div>
             <div class="mb-2">
-              <label for="url-add-form" class="col-form-label">URL:</label>
+              <div class="d-flex justify-content-between">
+                <label for="url-add-form" class="col-form-label">URL:</label>
+                <span class="col-form-label url-test" :class="{ 'disabled-url-test': !websiteAdd.url }"
+                  @click="isValidUrl">
+                  Probar URL
+                </span>
+              </div>
               <input type="text" class="form-control" id="url-add-form" v-model="websiteAdd.url">
             </div>
             <div class="mb-2">
@@ -91,3 +108,17 @@ const addWebsite = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.url-test{
+  color: black; 
+  text-decoration: underline; 
+  cursor: pointer
+}
+
+.disabled-url-test {
+  color: #999;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+</style>
