@@ -1,13 +1,14 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Snapshot} from './snapshot.model';
 
-@model({settings: {strict: false}})
+@model()
 export class Tarea extends Entity {
   @property({
     type: 'string',
     id: true,
     generated: true,
   })
-  idTarea?: string;
+  id?: string;
 
   @property({
     type: 'date',
@@ -16,20 +17,24 @@ export class Tarea extends Entity {
   timestamp: string;
 
   @property({
-    type: 'boolean',
+    type: 'string',
     required: true,
   })
-  ultimoEstado: boolean;
+  nombre: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  estado: string;
 
   @property({
     type: 'string',
   })
   sitioId?: string;
-  // Define well-known properties here
 
-  // Indexer property to allow additional data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [prop: string]: any;
+  @hasMany(() => Snapshot)
+  snapshots: Snapshot[];
 
   constructor(data?: Partial<Tarea>) {
     super(data);

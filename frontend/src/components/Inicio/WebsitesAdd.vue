@@ -10,11 +10,13 @@ const props = defineProps({
 
 const websiteAdd = ref({
   userEmail: props.user.email,
+  docExtractor: `(cheerio) => {\n    return {attr:cheerio(\"elem\").text()}\n }`
 })
 
 const resetWebsiteAdd = () => {
   websiteAdd.value = {
-    userEmail: props.user.email
+    userEmail: props.user.email,
+    docExtractor: `(cheerio) => {\n    return {attr:cheerio(\"elem\").text()}\n }`
   }
 }
 
@@ -32,6 +34,17 @@ const addWebsite = () => {
   resetWebsiteAdd();
 }
 
+const isValidUrl = () => {
+  let url;
+  try {
+    url = new URL(websiteAdd.value.url);
+    if (url.protocol === "http:" || url.protocol === "https:")
+      Swal.fire('Correcto', `La URL ${websiteAdd.value.url} es correcta`, 'success');
+  }
+  catch (err) {
+    Swal.fire('Error', 'La URL no es valida', 'error');
+  }
+}
 
 </script>
 
@@ -54,7 +67,13 @@ const addWebsite = () => {
               <input type="text" class="form-control" id="name-add-form" v-model="websiteAdd.nombre">
             </div>
             <div class="mb-2">
-              <label for="url-add-form" class="col-form-label">URL:</label>
+              <div class="d-flex justify-content-between">
+                <label for="url-add-form" class="col-form-label">URL:</label>
+                <span class="col-form-label url-test" :class="{ 'disabled-url-test': !websiteAdd.url }"
+                  @click="isValidUrl">
+                  Probar URL
+                </span>
+              </div>
               <input type="text" class="form-control" id="url-add-form" v-model="websiteAdd.url">
             </div>
             <div class="mb-2">
@@ -68,8 +87,13 @@ const addWebsite = () => {
 
             <div class="mb-2">
               <label for="docExtractor-add-form" class="col-form-label">Extractor de documento</label>
-              <textarea class="form-control" id="docExtractor-add-form" rows="3"
-                v-model.number="websiteAdd.docExtractor"></textarea>
+              <textarea class="form-control" id="docExtractor-add-form" rows="3" v-model="websiteAdd.docExtractor"
+                spellcheck="false"></textarea>
+            </div>
+            <div class="mb-2">
+              <label for="custom-selector-add-form" class="col-form-label">Selector de links (opcional)</label>
+              <input type="text" class="form-control" id="custo-selector-add-form"
+                v-model="websiteAdd.customLinkSelector">
             </div>
           </form>
         </div>
@@ -84,3 +108,17 @@ const addWebsite = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.url-test{
+  color: black; 
+  text-decoration: underline; 
+  cursor: pointer
+}
+
+.disabled-url-test {
+  color: #999;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+</style>

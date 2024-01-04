@@ -1,6 +1,7 @@
 import {AuthenticationComponent, registerAuthenticationStrategy} from '@loopback/authentication';
 import {BootMixin} from '@loopback/boot';
-import {ApplicationConfig} from '@loopback/core';
+import {ApplicationConfig, createBindingFromClass} from '@loopback/core';
+import {CronComponent} from '@loopback/cron';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
 import {
@@ -12,6 +13,9 @@ import 'dotenv/config';
 import path from 'path';
 import {JWTAuthenticationStrategy, JWTServiceProvider, KEY} from './authentication-strategies';
 import {MySequence} from './sequence';
+import {MyCronJob} from './utils/MyCronJob.';
+
+// CronJob
 
 export {ApplicationConfig};
 
@@ -74,5 +78,9 @@ export class SearchApplication extends BootMixin(
       servers: [{url: '/'}],
       security: [{bearerAuth: []}],
     });
+
+    this.component(CronComponent);
+    this.add(createBindingFromClass(MyCronJob));
+
   }
 }

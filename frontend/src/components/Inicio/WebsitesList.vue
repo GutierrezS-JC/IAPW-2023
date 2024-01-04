@@ -3,9 +3,11 @@ import WebsiteDetails from '@/components/Inicio/WebsiteDetails.vue'
 import Swal from 'sweetalert2'
 
 import { ref } from 'vue'
+import { useRouter } from "vue-router";
 import { client } from '../../types/ApiClient';
 
 const website = ref({})
+const router = useRouter();
 
 const setWebsiteDetails = (id) => {
   client['SitioController.findById'](id).then(
@@ -49,6 +51,11 @@ const deleteWebsite = async (idSitio) => {
   })
 }
 
+// Router
+const gotoJobs = (websiteId) => {
+  router.push(`/jobs/${websiteId}`)
+}
+
 const props = defineProps({
   getWebsites: Function,
   websites: Array
@@ -65,11 +72,12 @@ const props = defineProps({
     <thead class="table-dark">
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Nombre del sitio</th>
-        <th scope="col">URL</th>
-        <th scope="col">Profundidad</th>
-        <th scope="col">Frecuencia</th>
-        <th></th>
+        <th>Nombre del sitio</th>
+        <th>URL</th>
+        <th>Profundidad</th>
+        <th>Frecuencia</th>
+        <th>Estado</th>
+        <th class="text-center">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -79,13 +87,23 @@ const props = defineProps({
         <td>{{ website.url }}</td>
         <td>{{ website.niveles }}</td>
         <td>{{ website.frecuencia }}</td>
-        <td> <span class="fs-4">
-            <i @click="setWebsiteDetails(website.idSitio)" style="cursor: pointer;" data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop" class="bi bi-pencil-square me-4"></i>
-            <i @click="deleteWebsite(website.idSitio)" class="bi bi-trash3-fill" style="cursor: pointer;"></i></span>
+        <td>{{ }}</td>
+        <td class="text-center">
+          <span class="fs-4">
+            <i class="bi bi-exclamation-triangle"></i>
+            <i class="bi bi-database ms-2 a-option" @click="gotoJobs(website.id)"></i>
+            <i @click="setWebsiteDetails(website.id)" data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop" class="bi bi-pencil-square ms-2 a-option"></i>
+            <i @click="deleteWebsite(website.id)" class="bi bi-trash3-fill ms-2 a-option"></i></span>
         </td>
       </tr>
     </tbody>
   </table>
   <WebsiteDetails :website="website" :resetWebsite="resetWebsite" :getWebsites="getWebsites" />
 </template>
+
+<style scoped>
+.a-option {
+  cursor: pointer;
+}
+</style>
