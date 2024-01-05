@@ -64,40 +64,6 @@ const props = defineProps({
 </script>
 
 <template>
-  <!-- <h1 class="fw-bold mb-3"> Sitios </h1> -->
-  <!-- <table class="table table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th>Nombre del sitio</th>
-        <th>URL</th>
-        <th>Profundidad</th>
-        <th>Frecuencia</th>
-        <th>Estado</th>
-        <th class="text-center">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(website, index) in websites">
-        <th scope="row">{{ index + 1 }}</th>
-        <td>{{ website.nombre }}</td>
-        <td>{{ website.url }}</td>
-        <td>{{ website.niveles }}</td>
-        <td>{{ website.frecuencia }}</td>
-        <td>{{ }}</td>
-        <td class="text-center">
-          <span class="fs-4">
-            <i class="bi bi-exclamation-triangle"></i>
-            <i class="bi bi-database ms-2 a-option" @click="gotoJobs(website.id)"></i>
-            <i @click="setWebsiteDetails(website.id)" data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop" class="bi bi-pencil-square ms-2 a-option"></i>
-            <i @click="deleteWebsite(website.id)" class="bi bi-trash3-fill ms-2 a-option"></i></span>
-        </td>
-      </tr>
-    </tbody>
-  </table> -->
-  <!-- <div class="mb-5"> -->
-
   <div class="row justify-content-around mb-5 mt-5">
     <h1 class="fw-bold mb-3"> Sitios </h1>
 
@@ -121,7 +87,7 @@ const props = defineProps({
           </span>
         </div>
         <div class="col-lg-3">
-          <span class="d-flex align-items-center ms-2">
+          <span class="d-flex align-items-center ms-2" @click="gotoJobs(website.id)">
             <button class="btn btn-dark" style="width: 7em;">Ver tareas</button>
           </span>
         </div>
@@ -135,7 +101,6 @@ const props = defineProps({
     </div>
 
   </div>
-  <!-- </div> -->
   <WebsiteDetails :website="website" :resetWebsite="resetWebsite" :getWebsites="getWebsites" />
 </template>
 

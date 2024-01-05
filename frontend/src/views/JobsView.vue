@@ -1,6 +1,7 @@
 <script setup>
 import AppHeader from '@/components/AppHeader/AppHeader.vue';
 import JobsHead from '../components/Jobs/JobsHead.vue';
+import JobsList from '../components/Jobs/JobsList.vue'
 
 import { useAuth0 } from "@auth0/auth0-vue";
 
@@ -40,8 +41,8 @@ onBeforeMount(async () => {
 
 <template>
   <AppHeader :isAuthenticated="isAuthenticated" />
-  <JobsHead :user="user" />
+  <JobsHead :user="user" :website="website" />
   <div class="container mt-3" style="min-height: 30em;">
-    <!-- <WebsitesList :getWebsites="getWebsites" :websites="websites" /> -->
+    <JobsList :websiteJobs="websiteJobs" />
   </div>
 </template>
