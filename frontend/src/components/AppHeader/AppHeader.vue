@@ -20,6 +20,15 @@ const props = defineProps({
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#">Inicio</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">Sitios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">Tareas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">Snapshots</a>
+          </li>
         </ul>
 
         <div v-if="isAuthenticated">

@@ -1,5 +1,7 @@
 <script setup>
-import WebsitesAdd from './WebsitesAdd.vue';
+// import WebsitesAdd from './WebsitesAdd.vue';
+import WebsitesAdd from '@/components/Inicio/WebsitesAdd.vue';
+import undraw_hello from '@/assets/undraw_hello.svg';
 
 const props = defineProps({
   getWebsites: Function,
@@ -9,13 +11,59 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="px-5 py-4 mb-4" style="background-color: #eaeaea; border-bottom: 1px solid #dee2e6 !important;">
-    <div class="container-fluid py-5">
-      <h1 class="display-5 fw-bold">Hola, {{ user.name }} </h1>
-      <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in
-        previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your
-        liking.</p>
+  <!-- <div class="container mb-5 mt-0 mt-sm-5"> -->
+  <!-- <div class="row"> -->
+  <!-- <div class="col-12 col-lg-7"> -->
+  <div class="row" style="background-color: #eaeaea98; border-radius: .7em; position: relative;">
+    <div class="col-12 col-lg-8 px-5 py-4">
+      <h1 class="display-6 fw-bold">Hola, {{ user.name }} </h1>
+      <p class="fs-5">Using a series of utilities, you can create this jumbotron, just like the one in
+        previous versions of Bootstrap.</p>
+      <img :src="undraw_hello" alt="Welcome back imagen"
+        style="max-width: 350px; position: absolute; right: 0; bottom: 0;" />
     </div>
   </div>
+  <button class="new-site-button mt-3" style="width: 100%; height: 3em; box-shadow: 1em;" type="button"
+    data-bs-target="#modal-add-form" data-bs-toggle="modal">Agregar un nuevo sitio</button>
+  <!-- </div> -->
+
+  <!-- <div class="col-12 col-lg-5 mt-sm-3 mt-lg-0">
+    <div class="row">
+      <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+        <div class="px-4 py-3 d-flex justify-content-center" style="background-color: #eaeaea98; border-radius: .7em;">
+          <h1 class="display-5 fw-bold">04</h1>
+          <span class="fs-5 fw-bold ms-2" style="align-self: center; line-height: 1.2;">Sitios registrados</span>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+        <div class="px-4 py-3 d-flex justify-content-center" style="background-color: #eaeaea98; border-radius: .7em;">
+          <h1 class="display-5 fw-bold">11</h1>
+          <span class="fs-5 fw-bold ms-2" style="align-self: center; line-height: 1.2;">Tareas ejecutadas</span>
+        </div>
+      </div>
+      <div class="col-12 mt-3">
+        <div class="px-4 py-3 d-flex justify-content-center" style="background-color: #eaeaea98; border-radius: .7em;">
+          <h1 class="display-5 fw-bold">102</h1>
+          <span class="fs-5 fw-bold ms-2" style="align-self: center; line-height: 1.2;">Snapshots capturados</span>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- </div> -->
+  <!-- </div> -->
+
+  <!-- Componente modal para agregar un sitio -->
   <WebsitesAdd :getWebsites="getWebsites" :user="user" />
 </template>
+
+<style scoped>
+.new-site-button {
+  box-shadow: 5px 5px #000;
+  border: 2px solid #000 !important;
+  border-radius: .5em;
+}
+
+.new-site-button:hover {
+  opacity: 1 !important;
+}
+</style>

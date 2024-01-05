@@ -64,11 +64,8 @@ const props = defineProps({
 </script>
 
 <template>
-  <h1> Lista de sitios </h1>
-  <button class="btn btn-dark mb-4" type="button" data-bs-target="#modal-add-form" data-bs-toggle="modal">
-    Agregar nuevo sitio
-  </button>
-  <table class="table table-hover">
+  <!-- <h1 class="fw-bold mb-3"> Sitios </h1> -->
+  <!-- <table class="table table-hover">
     <thead class="table-dark">
       <tr>
         <th scope="col">#</th>
@@ -98,7 +95,47 @@ const props = defineProps({
         </td>
       </tr>
     </tbody>
-  </table>
+  </table> -->
+  <!-- <div class="mb-5"> -->
+
+  <div class="row justify-content-around mb-5 mt-5">
+    <h1 class="fw-bold mb-3"> Sitios </h1>
+
+    <div v-for="(website, index) in websites" class="col-12 mt-3" style="position: relative;">
+      <div class="d-flex p-4 align-items-center"
+        style="background-color: #eaeaea98; border-radius: .7em; flex-wrap: wrap;">
+        <div class="col-lg-5" style="line-height: .8;">
+          <h1 class="fw-bold" style="font-size: 1.4em;">{{ website.nombre }} </h1>
+          <span class="fs-5" style="font-size: 1.1em;">{{ website.url }}</span>
+        </div>
+        <div class="col-lg-2">
+          <span class="d-flex align-items-center">
+            <i class="bi bi-clock-fill me-2 fs-4"></i>
+            <h1 style="font-size: 1.1em; margin-bottom: 0;">{{ website.frecuencia }}min</h1>
+          </span>
+        </div>
+        <div class="col-lg-2">
+          <span class="d-flex align-items-center">
+            <i class="bi bi-stack me-2 fs-4"></i>
+            <h1 style="font-size: 1.1em; margin-bottom: 0;">{{ website.niveles }} niveles</h1>
+          </span>
+        </div>
+        <div class="col-lg-3">
+          <span class="d-flex align-items-center ms-2">
+            <button class="btn btn-dark" style="width: 7em;">Ver tareas</button>
+          </span>
+        </div>
+
+        <span style="position: absolute; right: 3%; bottom: 8%;">
+          <i @click="setWebsiteDetails(website.id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+            class="bi bi-pencil-square ms-2 a-option fs-5"></i>
+          <i @click="deleteWebsite(website.id)" class="bi bi-trash3-fill ms-2 a-option fs-5"></i>
+        </span>
+      </div>
+    </div>
+
+  </div>
+  <!-- </div> -->
   <WebsiteDetails :website="website" :resetWebsite="resetWebsite" :getWebsites="getWebsites" />
 </template>
 
