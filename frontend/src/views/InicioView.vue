@@ -71,8 +71,4 @@ onBeforeMount(async () => {
       </div> -->
     </div>
   </div>
-
-  <!-- <div class="container mt-3" style="min-height: 30em;">
-    <WebsitesList :getWebsites="getWebsites" :websites="websites" />
-  </div> -->
 </template>

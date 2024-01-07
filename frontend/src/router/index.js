@@ -4,6 +4,7 @@ import { authGuard } from '@auth0/auth0-vue'
 import HomeView from '../views/HomeView.vue'
 import InicioView from '../views/InicioView.vue'
 import JobsView from '../views/JobsView.vue'
+import SnapshotsView from '../views/SnapshotsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,12 @@ const router = createRouter({
       name:'jobs',
       beforeEnter: authGuard,
       component: JobsView
+    },
+    {
+      path:'/snapshots/:id',
+      name:'snapshots',
+      beforeEnter: authGuard,
+      component: SnapshotsView
     }
   ]
 })

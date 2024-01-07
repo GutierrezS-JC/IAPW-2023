@@ -22,7 +22,7 @@ const resetWebsite = () => {
 const deleteWebsite = async (idSitio) => {
   Swal.fire({
     title: '¿Estas seguro?',
-    text: "Estas a punto de eliminar un sitio web de forma permanente",
+    text: "Estas a punto de eliminar el sitio web de forma permanente",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
