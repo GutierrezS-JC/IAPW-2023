@@ -33,7 +33,6 @@ const props = defineProps({
 
         <div v-if="isAuthenticated">
           <span style="color:white">
-            <!-- <span class="me-3" style="color: white;">Bienvenido </span> -->
             <LogoutButton />
           </span>
         </div>

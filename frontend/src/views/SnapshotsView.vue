@@ -1,6 +1,7 @@
 <script setup>
 import AppHeader from '@/components/AppHeader/AppHeader.vue';
 import SnapshotsHead from '@/components/Snapshots/SnapshotsHead.vue';
+import SnapshotsList from '@/components/Snapshots/SnapshotsList.vue';
 
 import { onBeforeMount, ref } from 'vue'
 
@@ -41,4 +42,5 @@ onBeforeMount(async () => {
 <template>
   <AppHeader :isAuthenticated="isAuthenticated" />
   <SnapshotsHead :jobInfo="jobInfo" />
+  <SnapshotsList :snapshots="jobSnapshots" />
 </template>
