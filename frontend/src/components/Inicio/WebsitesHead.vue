@@ -14,7 +14,7 @@ const props = defineProps({
   <!-- <div class="container mb-5 mt-0 mt-sm-5"> -->
   <!-- <div class="row"> -->
   <!-- <div class="col-12 col-lg-7"> -->
-  <div class="row" style="background-color: #eaeaea98; border-radius: .7em; position: relative;">
+  <div class="row" style="background-color: #eaeaeab6; border-radius: .7em; position: relative;">
     <div class="col-12 col-lg-8 px-5 py-4">
       <h1 class="display-6 fw-bold">Hola, {{ user.name }} </h1>
       <p class="fs-5">Using a series of utilities, you can create this jumbotron, just like the one in

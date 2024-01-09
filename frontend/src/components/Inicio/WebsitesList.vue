@@ -76,7 +76,7 @@ const props = defineProps({
 
 <template>
   <div class="row justify-content-around mb-5 mt-5">
-    <h1 class="fw-bold mb-3"> Sitios </h1>
+    <h1 class="fw-bold mb-2"> Sitios </h1>
     <!-- Spinner -->
     <div v-if="props.loading" class="d-flex justify-content-center align-items-center mt-4">
       <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
@@ -87,8 +87,7 @@ const props = defineProps({
     <!-- Se realizo la carga, renderizo lista -->
     <div v-else>
       <div v-for="(website, index) in websites" class="col-12 mt-3" style="position: relative;">
-        <div class="d-flex p-4 align-items-center"
-          style="background-color: #eaeaea98; border-radius: .7em; flex-wrap: wrap;">
+        <div class="d-flex p-4 align-items-center website-item-list">
           <div class="col-lg-5" style="line-height: .8;">
             <h1 class="fw-bold" style="font-size: 1.4em;">{{ website.nombre }} </h1>
             <span class="fs-5" style="font-size: 1.1em;">{{ website.url }}</span>
@@ -127,5 +126,14 @@ const props = defineProps({
 <style scoped>
 .a-option {
   cursor: pointer;
+}
+.website-item-list {
+  background-color: #eaeaeab6;
+  border-radius: .7em;
+  flex-wrap: wrap;
+}
+
+.website-item-list:hover {
+  background-color: #e1e1e1a2;
 }
 </style>

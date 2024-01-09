@@ -19,7 +19,7 @@ const props = defineProps({
       <div class="mt-2">
         <span class="fw-bold">Fecha de registro:</span> <span> {{ new Date(jobInfo.timestamp).toLocaleDateString() }}</span>
       </div>
-      <i class="bi bi-clock-fill"
+      <i class="bi bi-camera"
         style="font-size: 18em; position: absolute; bottom: -.45em; right: -.12em; color: rgba(255, 255, 255, 0.159);"></i>
     </div>
   </div>
