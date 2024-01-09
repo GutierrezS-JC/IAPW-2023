@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Starcrawler</a>
+      <RouterLink to="/inicio" class="navbar-brand">Starcrawler</RouterLink>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -18,16 +18,7 @@ const props = defineProps({
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Sitios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Tareas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Snapshots</a>
+            <RouterLink to="/inicio" class="nav-link">Ver todos los snapshots</RouterLink>
           </li>
         </ul>
 

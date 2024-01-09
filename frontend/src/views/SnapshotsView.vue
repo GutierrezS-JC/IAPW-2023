@@ -18,22 +18,38 @@ const { isAuthenticated, user } = useAuth0();
 // Objetos obtenidos desde la BD
 const jobSnapshots = ref([]);
 const jobInfo = ref({});
+const loading = ref(true);
 
-const getJobSnapshots = (jobId) => {
-  client['TareaSnapshotController.find'](jobId).then(
-    result => jobSnapshots.value = result.data
-  )
-}
+const getJobSnapshots = async (jobId) => {
+  try {
+    const result = await client['TareaSnapshotController.find'](jobId);
+    jobSnapshots.value = result.data;
+  } catch (error) {
+    console.error('Error fetching snapshots:', error);
+    throw error;
+  }
+};
 
-const getJobInfo = (jobId) => {
-  client['TareaController.findById'](jobId).then(
-    result => jobInfo.value = result.data
-  )
-}
+const getJobInfo = async (jobId) => {
+  try {
+    const result = await client['TareaController.findById'](jobId);
+    jobInfo.value = result.data;
+  } catch (error) {
+    console.error('Error fetching job info:', error);
+    throw error;
+  }
+};
 
 onBeforeMount(async () => {
-  getJobInfo(route.params.id);
-  getJobSnapshots(route.params.id);
+  try {
+    await Promise.all([
+      getJobInfo(route.params.id), getJobSnapshots(route.params.id)
+    ]);
+  } catch (error) {
+    console.log('Error: ', error);
+  } finally {
+    loading.value = false;
+  }
 });
 
 </script>
@@ -41,6 +57,14 @@ onBeforeMount(async () => {
 
 <template>
   <AppHeader :isAuthenticated="isAuthenticated" />
-  <SnapshotsHead :jobInfo="jobInfo" />
-  <SnapshotsList :snapshots="jobSnapshots" />
+
+  <div v-if="loading" class="d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div v-else>
+    <SnapshotsHead :jobInfo="jobInfo" />
+    <SnapshotsList :snapshots="jobSnapshots" />
+  </div>
 </template>

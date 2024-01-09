@@ -31,7 +31,7 @@ const props = defineProps({
       style="color: white; position: relative; overflow: hidden; flex-wrap: wrap; align-items: center;">
       <div>
         Buscar
-        <input type="text" class="form-control mt-1" placeholder="Nombre de tarea...">
+        <input type="text" class="form-control mt-1" placeholder="Buscar por keyphrase...">
       </div>
 
       <div class="ms-4">
