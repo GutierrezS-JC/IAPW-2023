@@ -2,6 +2,7 @@
 import AppHeader from '@/components/AppHeader/AppHeader.vue';
 import SnapshotsHead from '@/components/Snapshots/SnapshotsHead.vue';
 import SnapshotsList from '@/components/Snapshots/SnapshotsList.vue';
+import SnapshotsSearch from '@/components/Snapshots/SnapshotsSearch.vue';
 
 import { onBeforeMount, ref } from 'vue'
 
@@ -18,7 +19,10 @@ const { isAuthenticated, user } = useAuth0();
 // Objetos obtenidos desde la BD
 const jobSnapshots = ref([]);
 const jobInfo = ref({});
+const searchResults = ref([]);
+
 const loading = ref(true);
+const loadingList = ref(false);
 
 const getJobSnapshots = async (jobId) => {
   try {
@@ -39,6 +43,27 @@ const getJobInfo = async (jobId) => {
     throw error;
   }
 };
+
+// Busqueda
+const handleSearch = async (jobId, searchString) => {
+  try {
+    if(searchString.trim() !== '') {
+      loadingList.value = true;
+      const result = await client['BusquedaController.snapshotDocumentos']({ id: jobId, q: searchString });
+      searchResults.value = result.data;
+    }
+    else {
+      // Evitamos hacer una consulta innecesaria y seteamos el valor por default
+      // si se ingresa un texto vacio volvemos a la lista original de la tarea
+      searchResults.value = []
+    }
+  }
+  catch (error) {
+    console.log('Error while doing search', error);
+  } finally {
+    loadingList.value = false;
+  }
+}
 
 onBeforeMount(async () => {
   try {
@@ -64,7 +89,15 @@ onBeforeMount(async () => {
     </div>
   </div>
   <div v-else>
-    <SnapshotsHead :jobInfo="jobInfo" />
-    <SnapshotsList :snapshots="jobSnapshots" />
+    <SnapshotsHead :jobInfo="jobInfo" :handleSearch="handleSearch" />
+    <div v-if="loadingList" class="d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+      <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div v-else>
+      <SnapshotsSearch v-if="searchResults.length !== 0" :searchResults="searchResults" />
+      <SnapshotsList v-else :snapshots="jobSnapshots" />
+    </div>
   </div>
 </template>

@@ -1,7 +1,19 @@
 <script setup>
+import { ref } from 'vue';
+
+// String para busqueda
+const searchTerm = ref('');
+
+const searchSnapshots = async (jobId) => {
+  if (searchTerm) {
+    const sanitizedSearchTerm = searchTerm.value.trim();
+    await props.handleSearch(jobId, sanitizedSearchTerm);
+  }
+};
 
 const props = defineProps({
-  jobInfo: Object
+  jobInfo: Object,
+  handleSearch: Function
 })
 
 </script>
@@ -17,7 +29,8 @@ const props = defineProps({
         {{ jobInfo.estado }}
       </div>
       <div class="mt-2">
-        <span class="fw-bold">Fecha de registro:</span> <span> {{ new Date(jobInfo.timestamp).toLocaleDateString() }}</span>
+        <span class="fw-bold">Fecha de registro: </span>
+        <span> {{ new Date(jobInfo.timestamp).toLocaleDateString() }} </span>
       </div>
       <i class="bi bi-camera"
         style="font-size: 18em; position: absolute; bottom: -.45em; right: -.12em; color: rgba(255, 255, 255, 0.159);"></i>
@@ -31,11 +44,11 @@ const props = defineProps({
       style="color: white; position: relative; overflow: hidden; flex-wrap: wrap; align-items: center;">
       <div>
         Buscar
-        <input type="text" class="form-control mt-1" placeholder="Buscar por keyphrase...">
+        <input type="text" v-model="searchTerm" class="form-control mt-1" placeholder="Buscar por keyphrase...">
       </div>
 
-      <div class="ms-4">
-        <button type="button" class="btn btn-outline-light mt-4">Buscar</button>
+      <div class="ms-3">
+        <button @click="searchSnapshots(jobInfo.id)" type="button" class="btn btn-outline-light mt-4">Buscar</button>
       </div>
     </div>
   </div>

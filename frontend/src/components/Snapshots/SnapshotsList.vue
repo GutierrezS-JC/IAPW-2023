@@ -16,7 +16,7 @@ const handleSnapshotSelect = (snapshot) => {
 }
 
 const props = defineProps({
-  snapshots: Array
+  snapshots: Array,
 })
 
 </script>
