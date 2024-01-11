@@ -15,6 +15,7 @@ const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
 // Sitios obtenidos desde BD
 const websites = ref([])
+const metricas = ref({})
 const loading = ref(true);
 
 // Configurando token
@@ -34,8 +35,17 @@ const getWebsites = () => {
   });
 }
 
+const getMetricas = () => {
+  client['MetricasController.metricasInicio'](user.value.email).then(
+    result => {
+      metricas.value = result.data
+    }
+  )
+}
+
 onBeforeMount(async () => {
   await configureToken()
+  getMetricas()
   getWebsites()
 });
 </script>
@@ -49,7 +59,7 @@ onBeforeMount(async () => {
         <WebsitesHead :getWebsites="getWebsites" :user="user" />
         <WebsitesList :getWebsites="getWebsites" :websites="websites" :loading="loading" />
       </div>
-      <WebsiteAside />
+      <WebsiteAside :metricas="metricas" />
     </div>
   </div>
 </template>
