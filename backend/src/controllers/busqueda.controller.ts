@@ -90,4 +90,49 @@ export class BusquedaController {
 
     return snapshotsConDocumentos;
   }
+
+  @get('/search')
+  @response(200, {
+    description: 'Array of documents and Snapshot Info',
+    example: [
+      {title: 'string', price: 'string', description: 'string'},
+    ]
+  })
+  async documentos(
+    @param.query.string('q') searchString?: string,
+  ): Promise<SnapshotDocumentos[]> {
+
+    // Si searchString (q) esta vacio entonces no hacemos la busqueda
+    // Se completa la verificacion en el frontend para evitar que este caso
+    // ocurra... por lo menos en el uso normal de la aplicacion
+    // Por las dudas y en cualquier otro caso... devolvemos una lista vacia :)
+    if (!searchString || searchString.trim() === '') {
+      return [];
+    }
+
+    // Todos los snapshots
+    const snapshots = this.snapshotRepository.find();
+
+    const snapshotsConDocumentos = (await snapshots)
+      .flatMap(snapshot => {
+        const snapshotId = snapshot.id;
+        const snapshotName = snapshot.nombre;
+        const snapshotStatus = snapshot.estado;
+        const snapshotDate = snapshot.timestamp
+        return (snapshot.documentos ?? []).flatMap(nivel =>
+          (nivel.resultados ?? []).map(documento => ({snapshotId, snapshotName, snapshotStatus, snapshotDate, documento}))
+        );
+      })
+      .filter(item => {
+        const values = Object.values(item.documento);
+        return values.some(value =>
+          typeof value === 'string' &&
+          (value as String).toLowerCase().includes((searchString).toLowerCase())
+        );
+      });
+
+    return snapshotsConDocumentos;
+  }
 }
+
+
