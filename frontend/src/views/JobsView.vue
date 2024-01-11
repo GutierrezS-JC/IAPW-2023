@@ -119,7 +119,7 @@ onBeforeMount(async () => {
           <div class="col-xl-4">
             <div class="card text-bg-dark mb-3">
               <div class="card-body d-flex justify-content-center">
-                <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">01</h5>
+                <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">0</h5>
                 <p class="card-text" style="font-size: 1.5em; font-weight: bold; align-self: center;">Errores capturados
                 </p>
               </div>

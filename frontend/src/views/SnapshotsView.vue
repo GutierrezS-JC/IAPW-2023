@@ -4,8 +4,9 @@ import SnapshotsHead from '@/components/Snapshots/SnapshotsHead.vue';
 import SnapshotsList from '@/components/Snapshots/SnapshotsList.vue';
 import SnapshotsSearch from '@/components/Snapshots/SnapshotsSearch.vue';
 
-import { onBeforeMount, ref } from 'vue'
+import Swal from 'sweetalert2'
 
+import { onBeforeMount, ref } from 'vue'
 import { useRoute } from "vue-router";
 import { useAuth0 } from "@auth0/auth0-vue";
 import { client } from '../types/ApiClient';
@@ -23,6 +24,11 @@ const searchResults = ref([]);
 
 const loading = ref(true);
 const loadingList = ref(false);
+
+// Alerts
+const alertSwal = (title, description, icon) => {
+  Swal.fire(title, description, icon);
+}
 
 const getJobSnapshots = async (jobId) => {
   try {
@@ -47,9 +53,12 @@ const getJobInfo = async (jobId) => {
 // Busqueda
 const handleSearch = async (jobId, searchString) => {
   try {
-    if(searchString.trim() !== '') {
+    if (searchString.trim() !== '') {
       loadingList.value = true;
       const result = await client['BusquedaController.snapshotDocumentos']({ id: jobId, q: searchString });
+      if (result.data.length === 0) {
+        alertSwal('Informe', `No se encontraron resultados con la frase "${searchString}"`, 'info')
+      }
       searchResults.value = result.data;
     }
     else {
@@ -63,6 +72,10 @@ const handleSearch = async (jobId, searchString) => {
   } finally {
     loadingList.value = false;
   }
+}
+
+const resetSearch = () => {
+  searchResults.value = []
 }
 
 onBeforeMount(async () => {
@@ -96,7 +109,7 @@ onBeforeMount(async () => {
       </div>
     </div>
     <div v-else>
-      <SnapshotsSearch v-if="searchResults.length !== 0" :searchResults="searchResults" />
+      <SnapshotsSearch v-if="searchResults.length !== 0" :searchResults="searchResults" :resetSearch="resetSearch" />
       <SnapshotsList v-else :snapshots="jobSnapshots" />
     </div>
   </div>

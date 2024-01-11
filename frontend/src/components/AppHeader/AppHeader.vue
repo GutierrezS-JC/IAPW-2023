@@ -18,7 +18,7 @@ const props = defineProps({
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <RouterLink to="/inicio" class="nav-link">Ver todos los snapshots</RouterLink>
+            <RouterLink to="/search" class="nav-link">Buscar en todos los snapshots</RouterLink>
           </li>
         </ul>
 
