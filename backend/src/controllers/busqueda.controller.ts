@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {repository} from '@loopback/repository';
 import {get, param, response} from '@loopback/rest';
 import {Documento} from '../interfaces/Documento';
@@ -11,6 +12,7 @@ export class BusquedaController {
     @repository(SnapshotRepository) public snapshotRepository: SnapshotRepository,
   ) { }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/tareas/{id}/consulta')
   @response(200, {
     description: 'Array of documents from Snapshot which belongs to a specific Tarea',
@@ -47,6 +49,7 @@ export class BusquedaController {
     return documentos;
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/tareas/{id}/search')
   @response(200, {
     description: 'Array of documents and Snapshot Info which belongs to a specific Tarea',
@@ -91,6 +94,7 @@ export class BusquedaController {
     return snapshotsConDocumentos;
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/search')
   @response(200, {
     description: 'Array of documents and Snapshot Info',

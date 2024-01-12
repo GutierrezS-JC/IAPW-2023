@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -7,13 +8,13 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
@@ -23,9 +24,10 @@ import {TareaRepository} from '../repositories';
 export class TareaController {
   constructor(
     @repository(TareaRepository)
-    public tareaRepository : TareaRepository,
-  ) {}
+    public tareaRepository: TareaRepository,
+  ) { }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @post('/tareas')
   @response(200, {
     description: 'Tarea model instance',
@@ -47,6 +49,7 @@ export class TareaController {
     return this.tareaRepository.create(tarea);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/tareas/count')
   @response(200, {
     description: 'Tarea model count',
@@ -58,6 +61,7 @@ export class TareaController {
     return this.tareaRepository.count(where);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/tareas')
   @response(200, {
     description: 'Array of Tarea model instances',
@@ -76,6 +80,7 @@ export class TareaController {
     return this.tareaRepository.find(filter);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @patch('/tareas')
   @response(200, {
     description: 'Tarea PATCH success count',
@@ -95,6 +100,7 @@ export class TareaController {
     return this.tareaRepository.updateAll(tarea, where);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/tareas/{id}')
   @response(200, {
     description: 'Tarea model instance',
@@ -111,6 +117,7 @@ export class TareaController {
     return this.tareaRepository.findById(id, filter);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @patch('/tareas/{id}')
   @response(204, {
     description: 'Tarea PATCH success',
@@ -129,6 +136,7 @@ export class TareaController {
     await this.tareaRepository.updateById(id, tarea);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @put('/tareas/{id}')
   @response(204, {
     description: 'Tarea PUT success',
@@ -140,6 +148,7 @@ export class TareaController {
     await this.tareaRepository.replaceById(id, tarea);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @del('/tareas/{id}')
   @response(204, {
     description: 'Tarea DELETE success',
