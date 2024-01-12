@@ -15,7 +15,13 @@ import { client } from '../types/ApiClient';
 const route = useRoute();
 
 // Metodos de AUTH0
-const { isAuthenticated, user } = useAuth0();
+const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+// Configurando token
+const configureToken = async () => {
+  const token = await getAccessTokenSilently();
+  client.defaults.headers['authorization'] = `Bearer ${token}`
+}
 
 // Objetos obtenidos desde la BD
 const jobSnapshots = ref([]);
@@ -80,6 +86,7 @@ const resetSearch = () => {
 
 onBeforeMount(async () => {
   try {
+    await configureToken()
     await Promise.all([
       getJobInfo(route.params.id), getJobSnapshots(route.params.id)
     ]);

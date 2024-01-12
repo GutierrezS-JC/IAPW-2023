@@ -5,13 +5,19 @@ import SearchEmpty from '@/components/Search/SearchEmpty.vue';
 
 import Swal from 'sweetalert2'
 
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { client } from '../types/ApiClient';
 import { useAuth0 } from "@auth0/auth0-vue";
 import SnapshotsSearch from '../components/Snapshots/SnapshotsSearch.vue';
 
 // Metodos de AUTH0
-const { isAuthenticated, user } = useAuth0();
+const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+// Configurando token
+const configureToken = async () => {
+  const token = await getAccessTokenSilently();
+  client.defaults.headers['authorization'] = `Bearer ${token}`
+}
 
 // Objetos obtenidos desde la BD
 const searchResults = ref([]);
@@ -51,6 +57,10 @@ const handleSearch = async (searchString) => {
 const resetSearch = () => {
   searchResults.value = []
 }
+
+onBeforeMount(async () => {
+  await configureToken()
+});
 
 </script>
 <template>

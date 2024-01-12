@@ -14,11 +14,19 @@ import { client } from '../types/ApiClient';
 const route = useRoute();
 
 // Metodos de AUTH0
-const { isAuthenticated, user } = useAuth0();
+const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+
+// Configurando token
+const configureToken = async () => {
+  const token = await getAccessTokenSilently();
+  client.defaults.headers['authorization'] = `Bearer ${token}`
+}
 
 // Objetos obtenidos desde la BD
 const website = ref({})
 const websiteJobs = ref([])
+const metricas = ref({})
+
 const loading = ref(true);
 
 const getWebsite = (websiteId) => {
@@ -39,9 +47,23 @@ const getWebsiteJobs = (websiteId) => {
     });
 }
 
+const getMetricas = (websiteId) => {
+  return client['MetricasController.metricasTarea'](websiteId)
+    .then(result => metricas.value = result.data)
+    .catch(error => {
+      console.error('Error fetching website count details: ', error);
+      throw error;
+    });
+}
+
 onBeforeMount(async () => {
   try {
-    await Promise.all([getWebsite(route.params.id), getWebsiteJobs(route.params.id)]);
+    await configureToken()
+    await Promise.all([
+      getWebsite(route.params.id),
+      getWebsiteJobs(route.params.id),
+      getMetricas(route.params.id)
+    ]);
   } catch (error) {
     console.log('Error: ', error);
   } finally {
@@ -76,17 +98,8 @@ onBeforeMount(async () => {
           Fecha de fin
           <input type="date" class="form-control mt-1">
         </div>
-        <div class="ms-4">
-          Estado
-          <select class="form-select mt-1" aria-label="Default select example">
-            <option selected>Todos</option>
-            <option value="1">Finalizado</option>
-            <option value="2">En proceso</option>
-            <option value="3">Error</option>
-          </select>
-        </div>
 
-        <div class="ms-4">
+        <div class="ms-sm-4 ms-0">
           <button type="button" class="btn btn-outline-light mt-4">Buscar</button>
         </div>
       </div>
@@ -97,31 +110,24 @@ onBeforeMount(async () => {
       <div class="mt-4">
         <h1 class="fw-bold" style="font-size: 2em;">Resumen</h1>
         <div class="row test d-none d-xl-block">
-          <div class="col-xl-4">
+          <div class="col-xl-6">
             <div class="card text-bg-dark mb-3">
               <div class="card-body d-flex justify-content-center">
-                <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">03</h5>
-                <p class="card-text" style="font-size: 1.5em; font-weight: bold; align-self: center;">Tareas registradas
-                </p>
+                <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">
+                  {{ metricas.tareas < 10 ? '0' + metricas.tareas : metricas.tareas }} </h5>
+                    <p class="card-text" style="font-size: 1.5em; font-weight: bold; align-self: center;">Tareas
+                      registradas
+                    </p>
               </div>
             </div>
           </div>
 
-          <div class="col-xl-4">
+          <div class="col-xl-6">
             <div class="card text-bg-dark mb-3">
               <div class="card-body d-flex justify-content-center">
-                <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">10</h5>
-                <p class="card-text" style="font-size: 1.5em; font-weight: bold; align-self: center;">Snapshots</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-xl-4">
-            <div class="card text-bg-dark mb-3">
-              <div class="card-body d-flex justify-content-center">
-                <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">0</h5>
-                <p class="card-text" style="font-size: 1.5em; font-weight: bold; align-self: center;">Errores capturados
-                </p>
+                <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">
+                  {{ metricas.snapshots < 10 ? '0' + metricas.snapshots : metricas.snapshots }} </h5>
+                    <p class="card-text" style="font-size: 1.5em; font-weight: bold; align-self: center;">Snapshots</p>
               </div>
             </div>
           </div>

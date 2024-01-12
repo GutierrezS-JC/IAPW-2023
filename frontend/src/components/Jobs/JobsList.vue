@@ -24,7 +24,6 @@ const props = defineProps({
           <th>Nombre</th>
           <th>Fecha de registro</th>
           <th>Hora de registro</th>
-          <th>Cant. snapshots</th>
           <th>Estado</th>
           <th></th>
         </tr>
@@ -35,7 +34,6 @@ const props = defineProps({
           <td>{{ job.nombre }}</td>
           <td>{{ new Date(job.timestamp).toLocaleDateString() }}</td>
           <td>{{ new Date(job.timestamp).toLocaleTimeString() }}</td>
-          <td>-</td>
           <td>
             <div class="badge bg-dark p-2" style="color: white;">
               {{ job.estado }}
@@ -56,5 +54,10 @@ const props = defineProps({
 <style scoped>
 tbody tr {
   cursor: pointer;
+}
+
+tbody th, tbody td {
+  padding-top: .8em;
+  padding-bottom: .8em;
 }
 </style>
