@@ -1,8 +1,9 @@
 import {authenticate} from '@loopback/authentication';
-import {repository} from '@loopback/repository';
-import {get, param, response} from '@loopback/rest';
+import {Filter, repository} from '@loopback/repository';
+import {get, getModelSchemaRef, param, response} from '@loopback/rest';
 import {Documento} from '../interfaces/Documento';
 import {SnapshotDocumentos} from '../interfaces/SnapshotDocumentos';
+import {Tarea} from '../models';
 import {SitioRepository, SnapshotRepository, TareaRepository} from '../repositories';
 
 export class BusquedaController {
@@ -136,5 +137,40 @@ export class BusquedaController {
       });
 
     return snapshotsConDocumentos;
+  }
+
+  @authenticate({strategy: 'auth0-jwt'})
+  @get('/search/sitios/{id}/tareas/busqueda-en-rango', {
+    responses: {
+      '200': {
+        description: 'Array of Tarea in the specified date range',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(Tarea)},
+          },
+        },
+      },
+    },
+  })
+  async tareasEnRango(
+    @param.path.string('id') id: string,
+    @param.query.date('fechaInicio') fechaInicio: string,
+    @param.query.date('fechaFin') fechaFin: string,
+  ): Promise<Tarea[]> {
+
+    if (!fechaInicio || !fechaFin) {
+      throw new Error('Se deben ingresar ambas fechas');
+    }
+
+    const filtro: Filter<Tarea> = {
+      where: {
+        sitioId: id,
+        timestamp: {
+          between: [fechaInicio, fechaFin],
+        },
+      },
+    };
+
+    return this.tareaRepository.find(filtro);
   }
 }
