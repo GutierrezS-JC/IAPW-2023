@@ -111,6 +111,47 @@ export class MetricasController {
   }
 
   @authenticate({strategy: 'auth0-jwt'})
+  @get('/metricas/sitio/{sitioId}/rango')
+  @response(200, {
+    description: 'Metricas y datos de un sitio especifico',
+  })
+  async metricasTareaEnRango(
+    @param.path.string('sitioId') sitioId: string,
+    @param.query.string('fechaInicio') fechaInicio: string,
+    @param.query.string('fechaFin') fechaFin: string,
+  ): Promise<MetricasTarea> {
+
+    const filter: Filter<Tarea> = {
+      where: {
+        sitioId: sitioId,
+        timestamp: {
+          between: [fechaInicio, fechaFin],
+        },
+      },
+    };
+
+    const tareasCount = (await this.tareaRepository.find(filter)).length;
+
+    let snapshotCount = 0;
+
+    // Tareas asociadas al sitio
+    const tareas: Tarea[] = await this.tareaRepository.find(filter);
+
+    for (const tarea of tareas) {
+      const contador = await this.snapshotRepository.count({
+        tareaId: tarea.id,
+        timestamp: {
+          between: [fechaInicio, fechaFin],
+        },
+      });
+
+      snapshotCount += contador.count;
+    }
+
+    return {tareas: tareasCount, snapshots: snapshotCount};
+  }
+
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/metricas/sitio/{sitioId}/documentos/count')
   @response(200, {
     description: 'Cantidad de documentos de un sitio especifico',

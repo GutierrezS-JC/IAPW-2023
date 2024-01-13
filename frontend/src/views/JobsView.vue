@@ -9,6 +9,7 @@ import { ref } from 'vue'
 import { useRoute } from "vue-router";
 import { onBeforeMount } from 'vue'
 import { client } from '../types/ApiClient';
+import Swal from 'sweetalert2';
 
 // Routes
 const route = useRoute();
@@ -28,6 +29,8 @@ const websiteJobs = ref([])
 const metricas = ref({})
 
 const loading = ref(true);
+const loadingResults = ref();
+const wasFiltered = ref(false);
 
 const getWebsite = (websiteId) => {
   return client['SitioController.findById'](websiteId)
@@ -47,6 +50,7 @@ const getWebsiteJobs = (websiteId) => {
     });
 }
 
+
 const getMetricas = (websiteId) => {
   return client['MetricasController.metricasTarea'](websiteId)
     .then(result => metricas.value = result.data)
@@ -54,6 +58,50 @@ const getMetricas = (websiteId) => {
       console.error('Error fetching website count details: ', error);
       throw error;
     });
+}
+
+const handleSearch = async (fechaInicio, fechaFin) => {
+  try {
+    if (fechaInicio && fechaFin) {
+      loadingResults.value = true
+      const results = await client['BusquedaController.tareasEnRango']({
+        id: route.params.id, fechaInicio: fechaInicio, fechaFin: fechaFin
+      })
+      if (results.data.length === 0) {
+        Swal.fire('Sin resultados', 'No hay tareas registradas entre las fechas ingresadas', 'info')
+      }
+      else {
+        const response = await client['MetricasController.metricasTareaEnRango']({
+          sitioId: route.params.id, fechaInicio: fechaInicio, fechaFin: fechaFin
+        })
+        wasFiltered.value = true
+        metricas.value = response.data
+        websiteJobs.value = results.data
+      }
+    }
+  }
+  catch (error) {
+    console.log(error)
+    Swal.fire('Error', error, 'error')
+  }
+  finally {
+    loadingResults.value = false
+  }
+}
+
+const resetList = async () => {
+  try {
+    loadingResults.value = true;
+    await Promise.all([
+      getWebsiteJobs(route.params.id),
+      getMetricas(route.params.id)
+    ]);
+  } catch (error) {
+    console.log('Error: ', error);
+  } finally {
+    wasFiltered.value = false
+    loadingResults.value = false;
+  }
 }
 
 onBeforeMount(async () => {
@@ -81,29 +129,7 @@ onBeforeMount(async () => {
     </div>
   </div>
   <div v-else>
-    <JobsHead :user="user" :website="website" />
-    <div class="container"
-      style="background-color: #212529; border-bottom-left-radius: .7em; border-bottom-right-radius: .7em; padding-right: 0;">
-      <div class="py-4 px-5 d-flex"
-        style="color: white; position: relative; overflow: hidden; flex-wrap: wrap; align-items: center;">
-        <div>
-          Buscar
-          <input type="text" class="form-control mt-1" placeholder="Nombre de tarea...">
-        </div>
-        <div class="ms-4">
-          Fecha de inicio
-          <input type="date" class="form-control mt-1">
-        </div>
-        <div class="ms-4">
-          Fecha de fin
-          <input type="date" class="form-control mt-1">
-        </div>
-
-        <div class="ms-sm-4 ms-0">
-          <button type="button" class="btn btn-outline-light mt-4">Buscar</button>
-        </div>
-      </div>
-    </div>
+    <JobsHead :user="user" :website="website" :handleSearch="handleSearch" />
 
     <div class="container">
       <!-- Esta row aparece en las vistas a partir del tamaño XL -->
@@ -136,7 +162,12 @@ onBeforeMount(async () => {
       </div>
     </div>
     <div class="container mt-3" style="min-height: 30em;">
-      <JobsList :websiteJobs="websiteJobs" />
+      <div v-if="loadingResults" class="d-flex justify-content-center align-items-center" style="min-height: 30vh;">
+        <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <JobsList v-else :websiteJobs="websiteJobs" :wasFiltered="wasFiltered" :resetList="resetList" />
     </div>
   </div>
 </template>

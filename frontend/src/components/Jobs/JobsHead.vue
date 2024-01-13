@@ -1,8 +1,24 @@
 <script setup>
+import { ref } from 'vue';
+import Swal from 'sweetalert2'
+
+// String para busqueda
+const startDate = ref()
+const endDate = ref()
+
+const doSearch = async () => {
+  if(!startDate.value || !endDate.value){
+    Swal.fire('Completar los datos', 'Para realizar la busqueda se necesitan ingresar ambas fechas', 'info');
+  }
+  else{
+    props.handleSearch(startDate.value, endDate.value)
+  }
+};
 
 const props = defineProps({
   user: Object,
-  website: Object
+  website: Object,
+  handleSearch: Function
 })
 
 </script>
@@ -20,6 +36,26 @@ const props = defineProps({
       </div>
       <i class="bi bi-clock-fill"
         style="font-size: 18em; position: absolute; bottom: -.45em; right: -.12em; color: rgba(255, 255, 255, 0.159);"></i>
+    </div>
+  </div>
+
+  <!-- Buscador -->
+  <div class="container"
+    style="background-color: #212529; border-bottom-left-radius: .7em; border-bottom-right-radius: .7em; padding-right: 0;">
+    <div class="py-4 px-5 d-flex"
+      style="color: white; position: relative; overflow: hidden; flex-wrap: wrap; align-items: center;">
+      <div>
+        Fecha de inicio
+        <input type="date" v-model="startDate" class="form-control mt-1">
+      </div>
+      <div class="ms-4">
+        Fecha de fin
+        <input type="date" v-model="endDate" class="form-control mt-1">
+      </div>
+
+      <div class="ms-sm-4 ms-0">
+        <button type="button" class="btn btn-outline-light mt-4" @click="doSearch">Buscar</button>
+      </div>
     </div>
   </div>
 </template>

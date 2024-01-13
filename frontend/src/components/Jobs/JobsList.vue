@@ -9,13 +9,20 @@ const goToSnapshot = (jobId) => {
 }
 
 const props = defineProps({
-  websiteJobs: Array
+  websiteJobs: Array,
+  wasFiltered: Boolean,
+  resetList: Function
 })
 
 </script>
 
 <template>
-  <h1 class="fw-bold mb-3" style="font-size: 2em;"> Tareas </h1>
+  <div class="mb-3">
+    <h1 class="fw-bold mb-1" style="font-size: 2em;"> Tareas </h1>
+    <button v-if="wasFiltered" type="button" class="btn btn-outline-dark btn-sm" @click="props.resetList()">
+      Ver todas las tareas
+    </button>
+  </div>
   <div class="table-responsive">
     <table class="table table-hover align-middle">
       <thead class="table-dark">
@@ -56,7 +63,8 @@ tbody tr {
   cursor: pointer;
 }
 
-tbody th, tbody td {
+tbody th,
+tbody td {
   padding-top: .8em;
   padding-bottom: .8em;
 }
