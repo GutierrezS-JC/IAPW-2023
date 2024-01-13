@@ -61,6 +61,63 @@ const deleteWebsite = async (idSitio) => {
   })
 }
 
+const changeEnabled = async (website) => {
+  let title = "";
+  let text = "";
+  let estado = "";
+
+  if (!website.habilitado) {
+    title = 'Confirmar habilitacion';
+    text = `¿Está seguro de que desea habilitar este sitio?
+      Una vez habilitado, el sitio estará disponible para su procesamiento.`;
+    estado = 'habilitado'
+  }
+  else {
+    title = "Confirmar deshabilitacion";
+    text = `¿Está seguro de que desea deshabilitar este sitio? 
+      Deshabilitar el sitio lo detendrá temporalmente en el procesamiento.`;
+    estado = 'deshabilitado'
+  }
+  Swal.fire({
+    title: title,
+    text: text,
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, confirmar!',
+    cancelButtonText: 'No, cancelar',
+  })
+  .then((result) => {
+    if (result.isConfirmed) {
+      props.loading = true;
+      client['SitioController.updateHabilitado']({ id: website.id }, { habilitado: !website.habilitado }).then(() => {
+        Swal.fire(
+          'Actualizado',
+          `El sitio web ahora se encuentra ${estado}`,
+          'success'
+        )
+        props.getWebsites();
+      })
+        .catch(e => {
+          console.log(e)
+          Swal.fire(
+            'Error',
+            'No se pudo actualizar el sitio',
+            'error'
+          )
+        })
+        .finally(() => {
+          props.loading = false;
+        }
+        );
+    }
+  })
+  .catch(error => {
+    console.log(error)
+  })
+}
+
 // Router
 const gotoJobs = (websiteId) => {
   router.push(`/jobs/${websiteId}`)
@@ -88,9 +145,9 @@ const props = defineProps({
     <div v-else>
       <div v-for="(website, index) in websites" class="col-12 mt-3" style="position: relative;">
         <div class="d-flex p-4 align-items-center website-item-list">
-          <div class="col-lg-5" style="line-height: .8;">
-            <h1 class="fw-bold" style="font-size: 1.4em;">{{ website.nombre }} </h1>
-            <span class="fs-5" style="font-size: 1.1em;">{{ website.url }}</span>
+          <div class="col-lg-4" style="line-height: .8;">
+            <h1 class="fw-bold" style="font-size: 1.2em;">{{ website.nombre }} </h1>
+            <span class="fs-6">{{ website.url }}</span>
           </div>
           <div class="col-lg-2">
             <span class="d-flex align-items-center">
@@ -104,13 +161,17 @@ const props = defineProps({
               <h1 style="font-size: 1.1em; margin-bottom: 0;">{{ website.niveles }} niveles</h1>
             </span>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-2">
             <span class="d-flex align-items-center ms-2" @click="gotoJobs(website.id)">
               <button class="btn btn-dark" style="width: 7em;">Ver tareas</button>
             </span>
           </div>
 
-          <span style="position: absolute; right: 3%; bottom: 8%;">
+          <span style="position: absolute; right: 2.5%; bottom: 8%;">
+            <i 
+              @click="changeEnabled(website)" 
+              :class="{'bi bi-toggle-on a-option fs-5': website.habilitado, 'bi bi-toggle-off a-option fs-5': !website.habilitado}">
+            </i>
             <i @click="setWebsiteDetails(website.id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
               class="bi bi-pencil-square ms-2 a-option fs-5"></i>
             <i @click="deleteWebsite(website.id)" class="bi bi-trash3-fill ms-2 a-option fs-5"></i>
@@ -127,6 +188,7 @@ const props = defineProps({
 .a-option {
   cursor: pointer;
 }
+
 .website-item-list {
   background-color: #eaeaeab6;
   border-radius: .7em;

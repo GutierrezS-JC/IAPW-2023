@@ -137,6 +137,25 @@ export class SitioController {
   }
 
   @authenticate({strategy: 'auth0-jwt'})
+  @patch('/sitios/{id}/habilitado')
+  @response(204, {
+    description: 'Sitio PATCH success',
+  })
+  async updateHabilitado(
+    @param.path.string('id') id: string,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: {type: 'object', properties: {habilitado: {type: 'boolean'}}},
+        },
+      },
+    })
+    partialSitio: {habilitado: boolean},
+  ): Promise<void> {
+    await this.sitioRepository.updateById(id, {habilitado: partialSitio.habilitado});
+  }
+
+  @authenticate({strategy: 'auth0-jwt'})
   @put('/sitios/{id}')
   @response(204, {
     description: 'Sitio PUT success',

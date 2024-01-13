@@ -12,6 +12,7 @@ export class MyCronJob extends CronJob {
   // Por las dudas dejamos constancia que ya se arreglaron los jobs pendientes
   // de correccion en la BD aunque no parece ser necesario
   private alreadyFixed: boolean = false;
+  private completionStatus: string = 'Finalizado';
 
   constructor(
     @repository(SitioRepository) public sitioRepository: SitioRepository,
@@ -24,6 +25,22 @@ export class MyCronJob extends CronJob {
         const sitios: Sitio[] = await sitioRepository.find();
 
         sitios.forEach(async sitio => {
+
+          // ======= VERIFICACION HABILITADO ======= //
+          if (!sitio.habilitado) {
+
+            // Busco la tarea correspondiente y la detengo si existe
+            const tareaEnEjecucion = this.runningJobs[sitio.getId()];
+            if (tareaEnEjecucion) {
+              this.completionStatus = 'Interrumpido';
+              tareaEnEjecucion.stop();
+              delete this.runningJobs[sitio.getId()];
+            }
+
+            return;
+          }
+          // ======= FIN VERIFICACION ======= //
+
           // Seteo la frecuencia establecida en el sitio obtenido de la BD
           const cronTime = `*/${sitio.frecuencia} * * * * `;
 
@@ -68,8 +85,8 @@ export class MyCronJob extends CronJob {
                 }
               },
               start: true,
-              async onComplete() {
-                await tareaRepository.updateById(nuevaTarea.id, {estado: 'Finalizado'});
+              onComplete: async () => {
+                await tareaRepository.updateById(nuevaTarea.id, {estado: this.completionStatus});
                 console.log(`${this.name} has been stopped`)
               },
             })
@@ -120,13 +137,33 @@ export class MyCronJob extends CronJob {
   }
 
   async verificarJobInterno(sitio: Sitio, tarea: CronJob) {
+    // Vemos el estado actual de habilitación del sitio
+
+    // const sitioActualizado = await this.sitioRepository.findById(sitio.getId());
+    // if (!sitioActualizado.habilitado) {
+    //   console.log('El sitio está deshabilitado. Deteniendo el job interno.');
+    //   this.completionStatus = 'Interrumpido';
+    //   tarea.stop();
+
+    //   // Buscar el índice del trabajo en el array runningJobs
+    //   const index = Object.keys(this.runningJobs).findIndex(key => key === sitio.getId());
+    //   if (index !== -1) {
+    //     // Eliminar el trabajo del array runningJobs
+    //     delete this.runningJobs[sitio.getId()];
+    //   } else {
+    //     console.log('No se encontró el trabajo en runningJobs.');
+    //   }
+
+    //   return;
+    // }
+
     // Tareas del sitio
     const tareas = await this.sitioRepository.findTareas(sitio.getId());
     const tareaMasReciente = this.ultimaTareaIngresada(tareas);
     const ahora = new Date();
     if (tareaMasReciente) {
       // El limite por el que comparamos (media hora)
-      const limiteDeTiempoEnMinutos = 3;
+      const limiteDeTiempoEnMinutos = 30;
       // El timestamp obtenido en la ultima tarea registrada
       const timestampRegistroJob = new Date(tareaMasReciente.timestamp)
       // Calcula la diferencia en milisegundos entre las dos fechas

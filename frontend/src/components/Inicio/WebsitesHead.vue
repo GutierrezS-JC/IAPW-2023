@@ -11,9 +11,6 @@ const props = defineProps({
 </script>
 
 <template>
-  <!-- <div class="container mb-5 mt-0 mt-sm-5"> -->
-  <!-- <div class="row"> -->
-  <!-- <div class="col-12 col-lg-7"> -->
   <div class="row" style="background-color: #eaeaeab6; border-radius: .7em; position: relative;">
     <div class="col-12 col-lg-8 px-5 py-4">
       <h1 class="display-6 fw-bold">Hola, {{ user.name }} </h1>
@@ -25,8 +22,7 @@ const props = defineProps({
   </div>
   <button class="new-site-button mt-3" style="width: 100%; height: 3em; box-shadow: 1em;" type="button"
     data-bs-target="#modal-add-form" data-bs-toggle="modal">Agregar un nuevo sitio</button>
-  <!-- </div> -->
-
+  <!-- Mobile view -->
   <!-- <div class="col-12 col-lg-5 mt-sm-3 mt-lg-0">
     <div class="row">
       <div class="col-12 col-sm-6 mt-3 mt-sm-0">
@@ -49,8 +45,6 @@ const props = defineProps({
       </div>
     </div>
   </div> -->
-  <!-- </div> -->
-  <!-- </div> -->
 
   <!-- Componente modal para agregar un sitio -->
   <WebsitesAdd :getWebsites="getWebsites" :user="user" />
