@@ -14,7 +14,7 @@
           <form>
             <div class="mb-2">
               <label for="name-form" class="col-form-label">Nombre del sitio:</label>
-              <input type="text" class="form-control" id="name-form" v-model="website.nombre">
+              <input type="text" class="form-control" id="name-form" v-model="website.nombre" disabled>
             </div>
             <div class="mb-2">
               <label for="url-form" class="col-form-label">URL:</label>
