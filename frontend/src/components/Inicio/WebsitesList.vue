@@ -174,7 +174,11 @@ const props = defineProps({
             </i>
             <i @click="setWebsiteDetails(website.id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
               class="bi bi-pencil-square ms-2 a-option fs-5"></i>
-            <i @click="deleteWebsite(website.id)" class="bi bi-trash3-fill ms-2 a-option fs-5"></i>
+              <i v-if="website.habilitado === true" 
+                class="bi bi-trash3-fill ms-2 fs-5" 
+                style="color: #21252932;"
+              ></i>
+              <i v-else @click="deleteWebsite(website.id)" class="bi bi-trash3-fill ms-2 a-option fs-5"></i>
           </span>
         </div>
       </div>

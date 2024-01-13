@@ -28,9 +28,15 @@ const website = ref({})
 const websiteJobs = ref([])
 const metricas = ref({})
 
+// Loaders - Spinners
 const loading = ref(true);
 const loadingResults = ref();
+
+// Indica si la lista fue resultado de un filtro por fechas
 const wasFiltered = ref(false);
+
+// String para edicion de nombre
+// const newJobName = ref('');
 
 const getWebsite = (websiteId) => {
   return client['SitioController.findById'](websiteId)

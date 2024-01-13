@@ -1,23 +1,33 @@
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from "vue-router";
+import JobsEdit from "./JobsEdit.vue";
 
 const router = useRouter();
+
+const jobSelected = ref(null);
 
 // Router
 const goToSnapshot = (jobId) => {
   router.push(`/snapshots/${jobId}`)
 }
 
+const handleEdit = (event, job) => {
+  event.stopPropagation();
+  jobSelected.value = job
+}
+
 const props = defineProps({
   websiteJobs: Array,
   wasFiltered: Boolean,
-  resetList: Function
+  resetList: Function,
 })
 
 </script>
 
 <template>
   <div class="mb-3">
+    <JobsEdit :jobSelected="jobSelected" />
     <h1 class="fw-bold mb-1" style="font-size: 2em;"> Tareas </h1>
     <button v-if="wasFiltered" type="button" class="btn btn-outline-dark btn-sm" @click="props.resetList()">
       Ver todas las tareas
@@ -48,8 +58,12 @@ const props = defineProps({
           </td>
           <td>
             <span>
-              <i class="bi bi-pencil-square ms-2 a-option fs-5"></i>
-              <i class="bi bi-trash3-fill ms-2 a-option fs-5"></i>
+              <i class="bi bi-pencil-square a-option fs-4"
+                data-bs-target="#modal-edit-job-form" 
+                data-bs-toggle="modal"
+                @click="handleEdit($event, job)"
+              ></i>
+              <i class="bi bi-trash3-fill ms-3 a-option fs-4"></i>
             </span>
           </td>
         </tr>
