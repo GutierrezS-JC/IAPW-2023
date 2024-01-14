@@ -14,8 +14,8 @@ const props = defineProps({
   <div class="row" style="background-color: #eaeaeab6; border-radius: .7em; position: relative;">
     <div class="col-12 col-lg-8 px-5 py-4">
       <h1 class="display-6 fw-bold">Hola, {{ user.name }} </h1>
-      <p class="fs-5">Using a series of utilities, you can create this jumbotron, just like the one in
-        previous versions of Bootstrap.</p>
+      <p class="fs-5">Bienvenido de vuelta a Starcrawler. ¿Listo para seguir explorando la web? Hace click en el boton a
+        continuación :)</p>
       <img :src="undraw_hello" alt="Welcome back imagen"
         style="max-width: 350px; position: absolute; right: 0; bottom: 0;" />
     </div>

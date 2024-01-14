@@ -21,10 +21,8 @@ const props = defineProps({
     style="background-color: #000000; border-top-left-radius: .7em; border-top-right-radius: .7em; padding-right: 0;">
     <div class="p-5" style="color: white; position: relative; overflow: hidden;">
       <h1 class="display-6 fw-bold">Busqueda</h1>
-      <p style="width: 80%;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque delectus velit impedit. Magni
-        dolorum omnis autem
-        nisi, dicta voluptatibus dolorem. Cumque enim ipsum quidem laboriosam ratione veritatis ducimus praesentium
-        voluptates!</p>
+      <p style="width: 80%;">Busca y encuentra documentos con facilidad. <br/>Ingresa tu keyphrase y explora entre los
+        resultados obtenidos.</p>
       <i class="bi bi-search"
         style="font-size: 16em; position: absolute; bottom: -.40em; right: 0; color: rgba(255, 255, 255, 0.159);"></i>
     </div>
