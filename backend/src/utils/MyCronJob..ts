@@ -9,6 +9,10 @@ import {runProcess} from './cheerioHelper';
 export class MyCronJob extends CronJob {
   // Para guardar las instancias de los jobs
   private runningJobs: {[sitioId: string]: CronJob} = {};
+  // Por las dudas dejamos constancia que ya se arreglaron los jobs pendientes
+  // de correccion en la BD aunque no parece ser necesario
+  private alreadyFixed: boolean = false;
+  private completionStatus: string = 'Finalizado';
 
   constructor(
     @repository(SitioRepository) public sitioRepository: SitioRepository,
@@ -21,12 +25,27 @@ export class MyCronJob extends CronJob {
         const sitios: Sitio[] = await sitioRepository.find();
 
         sitios.forEach(async sitio => {
+
+          // ======= VERIFICACION HABILITADO ======= //
+          if (!sitio.habilitado) {
+
+            // Busco la tarea correspondiente y la detengo si existe
+            const tareaEnEjecucion = this.runningJobs[sitio.getId()];
+            if (tareaEnEjecucion) {
+              this.completionStatus = 'Interrumpido';
+              tareaEnEjecucion.stop();
+              delete this.runningJobs[sitio.getId()];
+            }
+
+            return;
+          }
+          // ======= FIN VERIFICACION ======= //
+
           // Seteo la frecuencia establecida en el sitio obtenido de la BD
           const cronTime = `*/${sitio.frecuencia} * * * * `;
 
           if (this.runningJobs[sitio.getId()]) {
             // El JOB ya se encuentra en ejecucion
-            console.log(`Job for sitio ${sitio.getId()} is running`);
             await this.verificarJobInterno(sitio, this.runningJobs[sitio.getId()]);
           }
           else {
@@ -66,7 +85,8 @@ export class MyCronJob extends CronJob {
                 }
               },
               start: true,
-              onComplete() {
+              onComplete: async () => {
+                await tareaRepository.updateById(nuevaTarea.id, {estado: this.completionStatus});
                 console.log(`${this.name} has been stopped`)
               },
             })
@@ -79,9 +99,64 @@ export class MyCronJob extends CronJob {
       cronTime: '*/10 * * * * *',
       start: true,
     });
+
+    // Si por algun motivo se detiene el servidor, los jobs (si se estaban ejecutando)
+    // nunca van a cambiar de estado y quedaran 'En proceso' hasta el fin de los tiempos.
+    // Es por esto que antes de ejecutar el cronJob se llama a este metodo
+    // encargado de obtener las tareas con dicho estado erroneo y las actualiza
+    // Este metodo solo se ejecuta una vez :)
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this.actualizarEstadoEnTareasInterrumpidas();
+
+  }
+
+  // Antes de que se dispare el cronJob
+  async actualizarEstadoEnTareasInterrumpidas() {
+    try {
+      if (!this.alreadyFixed) {
+        const tareasEnProceso = await this.tareaRepository.find({
+          where: {estado: 'En proceso'},
+        });
+
+        for (const tarea of tareasEnProceso) {
+          await this.actualizar(tarea);
+        }
+
+        this.alreadyFixed = true;
+        console.log('All interrupted jobs have been updated')
+      }
+    }
+    catch (error) {
+      console.log('Error when executing update on interrupted jobs')
+    }
+  }
+
+  // Se realiza la actualizacion del estado en la tarea
+  async actualizar(tarea: Tarea) {
+    await this.tareaRepository.updateById(tarea.id, {estado: 'Interrumpido'});
   }
 
   async verificarJobInterno(sitio: Sitio, tarea: CronJob) {
+    // Vemos el estado actual de habilitación del sitio
+
+    // const sitioActualizado = await this.sitioRepository.findById(sitio.getId());
+    // if (!sitioActualizado.habilitado) {
+    //   console.log('El sitio está deshabilitado. Deteniendo el job interno.');
+    //   this.completionStatus = 'Interrumpido';
+    //   tarea.stop();
+
+    //   // Buscar el índice del trabajo en el array runningJobs
+    //   const index = Object.keys(this.runningJobs).findIndex(key => key === sitio.getId());
+    //   if (index !== -1) {
+    //     // Eliminar el trabajo del array runningJobs
+    //     delete this.runningJobs[sitio.getId()];
+    //   } else {
+    //     console.log('No se encontró el trabajo en runningJobs.');
+    //   }
+
+    //   return;
+    // }
+
     // Tareas del sitio
     const tareas = await this.sitioRepository.findTareas(sitio.getId());
     const tareaMasReciente = this.ultimaTareaIngresada(tareas);

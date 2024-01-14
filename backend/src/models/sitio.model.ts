@@ -51,6 +51,12 @@ export class Sitio extends Entity {
   })
   userEmail: string;
 
+  @property({
+    type: 'boolean',
+    default: true,
+  })
+  habilitado: boolean;
+
   @hasMany(() => Tarea)
   tareas: Tarea[];
 

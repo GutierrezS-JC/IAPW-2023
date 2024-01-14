@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -16,8 +17,8 @@ import {
   requestBody,
 } from '@loopback/rest';
 import {
-  Tarea,
   Snapshot,
+  Tarea,
 } from '../models';
 import {TareaRepository} from '../repositories';
 
@@ -26,6 +27,7 @@ export class TareaSnapshotController {
     @repository(TareaRepository) protected tareaRepository: TareaRepository,
   ) { }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/tareas/{id}/snapshots', {
     responses: {
       '200': {
@@ -45,6 +47,7 @@ export class TareaSnapshotController {
     return this.tareaRepository.snapshots(id).find(filter);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @post('/tareas/{id}/snapshots', {
     responses: {
       '200': {
@@ -70,6 +73,7 @@ export class TareaSnapshotController {
     return this.tareaRepository.snapshots(id).create(snapshot);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @patch('/tareas/{id}/snapshots', {
     responses: {
       '200': {
@@ -93,6 +97,7 @@ export class TareaSnapshotController {
     return this.tareaRepository.snapshots(id).patch(snapshot, where);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @del('/tareas/{id}/snapshots', {
     responses: {
       '200': {

@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -26,6 +27,7 @@ export class SitioTareaController {
     @repository(SitioRepository) protected sitioRepository: SitioRepository,
   ) { }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @get('/sitios/{id}/tareas', {
     responses: {
       '200': {
@@ -45,6 +47,7 @@ export class SitioTareaController {
     return this.sitioRepository.tareas(id).find(filter);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @post('/sitios/{id}/tareas', {
     responses: {
       '200': {
@@ -70,6 +73,7 @@ export class SitioTareaController {
     return this.sitioRepository.tareas(id).create(tarea);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @patch('/sitios/{id}/tareas', {
     responses: {
       '200': {
@@ -93,6 +97,7 @@ export class SitioTareaController {
     return this.sitioRepository.tareas(id).patch(tarea, where);
   }
 
+  @authenticate({strategy: 'auth0-jwt'})
   @del('/sitios/{id}/tareas', {
     responses: {
       '200': {
