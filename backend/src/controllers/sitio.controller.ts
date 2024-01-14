@@ -11,6 +11,7 @@ import {
   del,
   get,
   getModelSchemaRef,
+  HttpErrors,
   param,
   patch,
   post,
@@ -19,12 +20,16 @@ import {
   response,
 } from '@loopback/rest';
 import {Sitio} from '../models';
-import {SitioRepository} from '../repositories';
+import {SitioRepository, SnapshotRepository, TareaRepository} from '../repositories';
 
 export class SitioController {
   constructor(
     @repository(SitioRepository)
     public sitioRepository: SitioRepository,
+    @repository(TareaRepository)
+    public tareaRepository: TareaRepository,
+    @repository(SnapshotRepository)
+    public snapshotRepository: SnapshotRepository,
   ) { }
 
   @authenticate({strategy: 'auth0-jwt'})
@@ -190,5 +195,36 @@ export class SitioController {
       });
     }
     return sitios;
+  }
+
+  @authenticate({strategy: 'auth0-jwt'})
+  @del('/sitios/{id}/eliminar-tareas-snapshots-sitio')
+  @response(204, {
+    description: 'Sitio, tareas, snapshots DELETE success',
+  })
+  async deleteTasksSnapshotsSite(
+    @param.path.string('id') id: string,
+  ): Promise<void> {
+
+    const sitio = await this.sitioRepository.findById(id);
+    if (!sitio || sitio.habilitado) {
+      throw new HttpErrors.BadRequest('El sitio debe estar deshabilitado para realizar las acciones de borrado.');
+    }
+
+    // Tareas asociadas al sitio
+    const tasks = await this.sitioRepository.tareas(id).find();
+
+    // Elminicacion de todos los snapshots de cada tarea
+    await Promise.all(
+      tasks.map(async (task) => {
+        await this.tareaRepository.snapshots(task.id).delete()
+      })
+    );
+
+    // Eliminacion de todas las tareas asociadas al sitio
+    await this.sitioRepository.tareas(id).delete();
+
+    // Y por ultimo... eliminamos el sitio
+    await this.sitioRepository.deleteById(id);
   }
 }

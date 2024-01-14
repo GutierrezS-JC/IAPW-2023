@@ -24,43 +24,43 @@ const resetWebsite = () => {
   website.value = {}
 }
 
-const deleteWebsite = async (idSitio) => {
-  Swal.fire({
-    title: '¿Estas seguro?',
-    text: "Estas a punto de eliminar el sitio web de forma permanente",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, eliminar!',
-    cancelButtonText: 'No, cancelar',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      props.loading = true;
-      client['SitioController.deleteById'](idSitio).then(() => {
-        Swal.fire(
-          'Eliminado!',
-          'El sitio web ha sido eliminado',
-          'success'
-        )
-        props.getWebsites();
-      })
-        .catch(e => {
-          console.log(e)
+const deleteWebsite = (sitio) => {
+  if (!sitio.habilitado) {
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "Estas a punto de eliminar el sitio web de forma permanente",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText: 'No, cancelar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        props.loading = true;
+        try {
+          await client['SitioController.deleteTasksSnapshotsSite'](sitio.id);
+          Swal.fire(
+            'Eliminado!',
+            'El sitio web ha sido eliminado',
+            'success'
+          );
+
+          props.getWebsites();
+        } catch (error) {
+          console.log(error);
           Swal.fire(
             'Error',
             'No se pudo eliminar el sitio',
             'error'
-          )
-        })
-        .finally(() => {
+          );
+        } finally {
           props.loading = false;
         }
-        );
-    }
-  })
-}
-
+      }
+    });
+  }
+};
 const changeEnabled = async (website) => {
   let title = "";
   let text = "";
@@ -88,34 +88,34 @@ const changeEnabled = async (website) => {
     confirmButtonText: 'Si, confirmar!',
     cancelButtonText: 'No, cancelar',
   })
-  .then((result) => {
-    if (result.isConfirmed) {
-      props.loading = true;
-      client['SitioController.updateHabilitado']({ id: website.id }, { habilitado: !website.habilitado }).then(() => {
-        Swal.fire(
-          'Actualizado',
-          `El sitio web ahora se encuentra ${estado}`,
-          'success'
-        )
-        props.getWebsites();
-      })
-        .catch(e => {
-          console.log(e)
+    .then((result) => {
+      if (result.isConfirmed) {
+        props.loading = true;
+        client['SitioController.updateHabilitado']({ id: website.id }, { habilitado: !website.habilitado }).then(() => {
           Swal.fire(
-            'Error',
-            'No se pudo actualizar el sitio',
-            'error'
+            'Actualizado',
+            `El sitio web ahora se encuentra ${estado}`,
+            'success'
           )
+          props.getWebsites();
         })
-        .finally(() => {
-          props.loading = false;
-        }
-        );
-    }
-  })
-  .catch(error => {
-    console.log(error)
-  })
+          .catch(e => {
+            console.log(e)
+            Swal.fire(
+              'Error',
+              'No se pudo actualizar el sitio',
+              'error'
+            )
+          })
+          .finally(() => {
+            props.loading = false;
+          }
+          );
+      }
+    })
+    .catch(error => {
+      console.log(error)
+    })
 }
 
 // Router
@@ -168,17 +168,13 @@ const props = defineProps({
           </div>
 
           <span style="position: absolute; right: 2.5%; bottom: 8%;">
-            <i 
-              @click="changeEnabled(website)" 
-              :class="{'bi bi-toggle-on a-option fs-5': website.habilitado, 'bi bi-toggle-off a-option fs-5': !website.habilitado}">
+            <i @click="changeEnabled(website)"
+              :class="{ 'bi bi-toggle-on a-option fs-5': website.habilitado, 'bi bi-toggle-off a-option fs-5': !website.habilitado }">
             </i>
             <i @click="setWebsiteDetails(website.id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
               class="bi bi-pencil-square ms-2 a-option fs-5"></i>
-              <i v-if="website.habilitado === true" 
-                class="bi bi-trash3-fill ms-2 fs-5" 
-                style="color: #21252932;"
-              ></i>
-              <i v-else @click="deleteWebsite(website.id)" class="bi bi-trash3-fill ms-2 a-option fs-5"></i>
+            <i v-if="website.habilitado === true" class="bi bi-trash3-fill ms-2 fs-5" style="color: #21252932;"></i>
+            <i v-else @click="deleteWebsite(website)" class="bi bi-trash3-fill ms-2 a-option fs-5"></i>
           </span>
         </div>
       </div>
