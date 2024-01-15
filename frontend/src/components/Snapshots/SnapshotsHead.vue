@@ -44,11 +44,11 @@ const props = defineProps({
       style="color: white; position: relative; overflow: hidden; flex-wrap: wrap; align-items: center;">
       <div>
         Buscar
-        <input type="text" v-model="searchTerm" class="form-control mt-1" placeholder="Buscar por keyphrase...">
+        <input id="busqueda-snapshot" type="text" v-model="searchTerm" class="form-control mt-1" placeholder="Buscar por keyphrase...">
       </div>
 
       <div class="ms-3">
-        <button @click="searchSnapshots(jobInfo.id)" type="button" class="btn btn-outline-light mt-4">Buscar</button>
+        <button id="busqueda-snapshot-button" @click="searchSnapshots(jobInfo.id)" type="button" class="btn btn-outline-light mt-4">Buscar</button>
       </div>
     </div>
   </div>
