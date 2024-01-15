@@ -140,9 +140,9 @@ onBeforeMount(async () => {
     <div class="container">
       <!-- Esta row aparece en las vistas a partir del tamaño XL -->
       <div class="mt-4">
-        <h1 class="fw-bold" style="font-size: 2em;">Resumen</h1>
-        <div class="row test d-none d-xl-block">
-          <div class="col-xl-6">
+        <h1 class="fw-bold test" style="font-size: 2em;">Resumen</h1>
+        <div class="row test">
+          <div class="col-xl-6 col-lg-4 col-12">
             <div class="card text-bg-dark mb-3">
               <div class="card-body d-flex justify-content-center">
                 <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">
@@ -154,7 +154,7 @@ onBeforeMount(async () => {
             </div>
           </div>
 
-          <div class="col-xl-6">
+          <div class="col-xl-6 col-lg-4 col-12">
             <div class="card text-bg-dark mb-3">
               <div class="card-body d-flex justify-content-center">
                 <h5 class="card-title me-3" style="font-size: 3.2em; font-weight: bold;">

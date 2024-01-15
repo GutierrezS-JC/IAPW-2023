@@ -42,7 +42,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetWebsite()">Cerrar</button>
-          <button @click="editWebsite(props.website.id)" type="button" class="btn btn-primary" data-bs-dismiss="modal">
+          <button @click="editWebsite(props.website.id)" type="button" class="btn btn-primary" data-bs-dismiss="modal" id="confirmar-editar-sitio">
             Guardar cambios
           </button>
         </div>

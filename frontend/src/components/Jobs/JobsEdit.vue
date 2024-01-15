@@ -71,7 +71,7 @@ const props = defineProps({
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
             @click="resetEditJobForm">Cerrar</button>
-          <button type="button" class="btn btn-primary" @click="editJobName" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-primary" @click="editJobName" data-bs-dismiss="modal" id="confirmar-editar-job">
             Guardar cambios
           </button>
         </div>

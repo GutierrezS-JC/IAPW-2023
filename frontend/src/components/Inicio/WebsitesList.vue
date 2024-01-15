@@ -142,7 +142,7 @@ const props = defineProps({
     </div>
 
     <!-- Se realizo la carga, renderizo lista -->
-    <div v-else>
+    <div v-else id="lista-sitios">
       <div v-for="(website, index) in websites" class="col-12 mt-3" style="position: relative;">
         <div class="d-flex p-4 align-items-center website-item-list">
           <div class="col-lg-4" style="line-height: .8;">
@@ -152,13 +152,13 @@ const props = defineProps({
           <div class="col-lg-2">
             <span class="d-flex align-items-center">
               <i class="bi bi-clock-fill me-2 fs-4"></i>
-              <h1 style="font-size: 1.1em; margin-bottom: 0;">{{ website.frecuencia }}min</h1>
+              <h2 style="font-size: 1.1em; margin-bottom: 0;">{{ website.frecuencia }}min</h2>
             </span>
           </div>
           <div class="col-lg-2">
             <span class="d-flex align-items-center">
               <i class="bi bi-stack me-2 fs-4"></i>
-              <h1 style="font-size: 1.1em; margin-bottom: 0;">{{ website.niveles }} niveles</h1>
+              <h2 style="font-size: 1.1em; margin-bottom: 0;">{{ website.niveles }} niveles</h2>
             </span>
           </div>
           <div class="col-lg-2">
