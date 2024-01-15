@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
+    "cypress": "^13.6.2",
     "vite": "^4.4.11"
   }
 }

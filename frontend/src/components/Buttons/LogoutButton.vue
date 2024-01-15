@@ -10,5 +10,5 @@
 </script>
 
 <template>
-  <button @click="handleLogout" class="btn btn-outline-light">Cerrar sesion</button>
+  <button @click="handleLogout" class="btn btn-outline-light" id="cerrar-sesion-button">Cerrar sesion</button>
 </template>

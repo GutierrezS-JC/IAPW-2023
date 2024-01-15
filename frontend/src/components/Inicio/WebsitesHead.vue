@@ -13,7 +13,7 @@ const props = defineProps({
 <template>
   <div class="row" style="background-color: #eaeaeab6; border-radius: .7em; position: relative;">
     <div class="col-12 col-lg-8 px-5 py-4">
-      <h1 class="display-6 fw-bold">Hola, {{ user.name }} </h1>
+      <h1 class="display-6 fw-bold" id="title-hello">Hola, {{ user.name }} </h1>
       <p class="fs-5">Bienvenido de vuelta a Starcrawler. ¿Listo para seguir explorando la web? Hace click en el boton a
         continuación :)</p>
       <img :src="undraw_hello" alt="Welcome back imagen"
@@ -21,7 +21,7 @@ const props = defineProps({
     </div>
   </div>
   <button class="new-site-button mt-3" style="width: 100%; height: 3em; box-shadow: 1em;" type="button"
-    data-bs-target="#modal-add-form" data-bs-toggle="modal">Agregar un nuevo sitio</button>
+    data-bs-target="#modal-add-form" data-bs-toggle="modal" id="agregar-nuevo-sitio">Agregar un nuevo sitio</button>
   <!-- Mobile view -->
   <!-- <div class="col-12 col-lg-5 mt-sm-3 mt-lg-0">
     <div class="row">

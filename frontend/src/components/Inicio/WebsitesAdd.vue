@@ -100,7 +100,7 @@ const isValidUrl = () => {
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetWebsiteAdd">Cerrar</button>
-          <button type="button" class="btn btn-primary" @click="addWebsite" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-primary" @click="addWebsite" data-bs-dismiss="modal" id="confirmar-agregar-sitio">
             Guardar cambios
           </button>
         </div>
