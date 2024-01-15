@@ -35,7 +35,7 @@ function logIntoGoogle(username, password, name) {
       !err.message.includes('Error in protected function')
   )
   cy.visit('http://localhost:5173/')
-  cy.get('.btn-outline-light').click()
+  cy.get('#boton-login').click()
 
   cy.origin(Auth0Domain, () => {
     if (!cy.viewport('macbook-15')) {
