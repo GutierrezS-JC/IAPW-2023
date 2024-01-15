@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
     <div class="container-fluid">
-      <RouterLink to="/inicio" class="navbar-brand">Starcrawler</RouterLink>
+      <RouterLink to="/inicio" class="navbar-brand" id="main-title-link">Starcrawler</RouterLink>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

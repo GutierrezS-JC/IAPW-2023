@@ -22,7 +22,7 @@ const props = defineProps({
     <hr />
     <div class="mt-2">
       <div v-for="(result, index) in searchResults">
-        <div class="p-2 text-break mt-4">
+        <div class="text-break snapshot-result p-2">
           <div class="fw-semibold fs-5">{{ result.snapshotName }}</div>
           <div class="fw-medium fs-6">{{ result.snapshotId }}</div>
           <div class="fw-medium fs-6" style="line-height: 1.4;">

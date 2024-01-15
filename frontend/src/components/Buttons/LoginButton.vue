@@ -13,5 +13,5 @@
 </script>
 
 <template>
-  <button @click="handleLogin" class="btn btn-outline-light">Iniciar sesion</button>
+  <button id="boton-login" @click="handleLogin" class="btn btn-sm btn-outline-light">Iniciar sesion</button>
 </template>

@@ -137,26 +137,6 @@ export class MyCronJob extends CronJob {
   }
 
   async verificarJobInterno(sitio: Sitio, tarea: CronJob) {
-    // Vemos el estado actual de habilitación del sitio
-
-    // const sitioActualizado = await this.sitioRepository.findById(sitio.getId());
-    // if (!sitioActualizado.habilitado) {
-    //   console.log('El sitio está deshabilitado. Deteniendo el job interno.');
-    //   this.completionStatus = 'Interrumpido';
-    //   tarea.stop();
-
-    //   // Buscar el índice del trabajo en el array runningJobs
-    //   const index = Object.keys(this.runningJobs).findIndex(key => key === sitio.getId());
-    //   if (index !== -1) {
-    //     // Eliminar el trabajo del array runningJobs
-    //     delete this.runningJobs[sitio.getId()];
-    //   } else {
-    //     console.log('No se encontró el trabajo en runningJobs.');
-    //   }
-
-    //   return;
-    // }
-
     // Tareas del sitio
     const tareas = await this.sitioRepository.findTareas(sitio.getId());
     const tareaMasReciente = this.ultimaTareaIngresada(tareas);
